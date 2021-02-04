@@ -20,12 +20,7 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
 USER jovyan
 
 # Python packages
-RUN conda config --add channels conda-forge && \
-    conda config --add channels bioconda && \
-    conda install --yes --quiet \
-    tensorflow && \
-    conda clean -yt && \
-    pip install --no-cache-dir bioblend galaxy-ie-helpers
+RUN pip install --no-cache-dir tensorflow bioblend galaxy-ie-helpers
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
