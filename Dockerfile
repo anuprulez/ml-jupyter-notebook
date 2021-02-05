@@ -1,4 +1,4 @@
-# Jupyter container used for Galaxy IPython (+other kernels) Integration
+# Jupyter container used for Galaxy IPython Notebook Integration
 
 FROM jupyter/tensorflow-notebook:latest
 
@@ -31,13 +31,16 @@ USER root
 # The Galaxy instance can copy in data that needs to be present to the Jupyter webserver
 RUN mkdir /import
 
+WORKDIR /import
+
 # We can get away with just creating this single file and Jupyter will create the rest of the
 # profile for us.
+
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir -p /home/$NB_USER/.jupyter/custom/
 
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
-COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
+COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 
 ADD ./custom.js /home/$NB_USER/.jupyter/custom/custom.js
 ADD ./custom.css /home/$NB_USER/.jupyter/custom/custom.css
@@ -55,8 +58,6 @@ ENV DEBUG=false \
     GALAXY_URL=none
 
 RUN mkdir /export/ && chown -R $NB_USER:users /home/$NB_USER/ /import /export/
-
-WORKDIR /import
 
 # Jupyter will run on port 8888, export this port to the host system
 
