@@ -17,52 +17,26 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
     zlib1g-dev libtinfo-dev libcairo2-dev libpango1.0-dev && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-USER jovyan
+USER $NB_USER
 
 # Python packages
 RUN pip install --no-cache-dir tensorflow bioblend galaxy-ie-helpers
 
 ADD ./startup.sh /startup.sh
-ADD ./monitor_traffic.sh /monitor_traffic.sh
-ADD ./get_notebook.py /get_notebook.py
 
 USER root
 
-# /import will be the universal mount-point for Jupyter
-# The Galaxy instance can copy in data that needs to be present to the Jupyter webserver
-RUN mkdir /import
+COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
+ADD ./default_notebook_ml.ipynb /home/$NB_USER/ipython_galaxy_notebook.ipynb
 
-
-# We can get away with just creating this single file and Jupyter will create the rest of the
-# profile for us.
-RUN mkdir -p /home/kumara/.ipython/profile_default/startup/
-RUN mkdir -p /home/kumara/.jupyter/custom/
-
-COPY ./ipython-profile.py /home/kumara/.ipython/profile_default/startup/00-load.py
-COPY ./jupyter_server_config.py /home/kumara/.jupyter/
-
-ADD ./custom.js /home/kumara/.jupyter/custom/custom.js
-ADD ./custom.css /home/kumara/.jupyter/custom/custom.css
-ADD ./default_notebook.ipynb /home/kumara/notebook.ipynb
-
-# ENV variables to replace conf file
 ENV DEBUG=false \
-    GALAXY_WEB_PORT=10000 \
     NOTEBOOK_PASSWORD=none \
     CORS_ORIGIN=none \
     DOCKER_PORT=none \
-    API_KEY=none \
-    HISTORY_ID=none \
-    REMOTE_HOST=none \
-    GALAXY_URL=none
+    REMOTE_HOST=none
 
-#RUN mkdir /export/ && chown -R kumara:users /home/kumara/ /import /export/
+RUN chown -R $NB_USER:users /home/$NB_USER/
 
-##USER jovyan
+WORKDIR /home/$NB_USER/
 
-WORKDIR /import
-
-# Jupyter will run on port 8888, export this port to the host system
-
-# Start Jupyter Notebook
 CMD /startup.sh

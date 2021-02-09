@@ -3,7 +3,6 @@
 import os
 
 c = get_config()
-c.NotebookApp.token = ''
 c.NotebookApp.password = ''
 c.NotebookApp.ip = '0.0.0.0'
 c.NotebookApp.port = 8888
@@ -32,9 +31,10 @@ headers = {
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.allow_credentials = True
 
-c.NotebookApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
+c.NotebookApp.base_url = '/ipython/'
+c.NotebookApp.base_kernel_url = '/ipython/'
 c.NotebookApp.tornado_settings = {
-    'static_url_prefix': '%s/ipython/static/' % os.environ.get('PROXY_PREFIX', '')
+    'static_url_prefix': '/ipython/static/'
 }
 
 if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
