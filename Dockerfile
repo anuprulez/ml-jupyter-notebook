@@ -37,6 +37,6 @@ ENV DEBUG=false \
 
 RUN chown -R $NB_USER:users /home/$NB_USER
 
-WORKDIR /home/$NB_USER
+WORKDIR /home/$NB_USER/work
 
 CMD /startup.sh
