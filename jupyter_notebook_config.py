@@ -28,12 +28,12 @@ headers = {
         """ % {'CORS_ORIGIN': CORS_ORIGIN, 'WS_CORS_ORIGIN': 'ws://%s' % CORS_ORIGIN_HOSTNAME}
 }
 
-c.NotebookApp.allow_origin = '*'
-c.NotebookApp.allow_credentials = True
+c.ServerApp.allow_origin = '*'
+c.ServerApp.allow_credentials = True
 
-c.NotebookApp.base_url = '/ipython/'
+c.ServerApp.base_url = '/ipython/'
 c.ServerApp.base_kernel_url = '/ipython/'
-c.NotebookApp.tornado_settings = {
+c.ServerApp.tornado_settings = {
     'static_url_prefix': '/ipython/static/'
 }
 
@@ -44,4 +44,4 @@ if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
 if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
 
-c.NotebookApp.tornado_settings['headers'] = headers
+c.ServerApp.tornado_settings['headers'] = headers

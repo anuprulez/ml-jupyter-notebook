@@ -1,4 +1,4 @@
-# Jupyter container used for Galaxy IPython Notebook Integration
+# Jupyter container used for Tensorflow IPython Notebook
 
 FROM jupyter/tensorflow-notebook:latest
 
@@ -20,14 +20,14 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
 USER $NB_USER
 
 # Python packages
-RUN pip install --no-cache-dir tensorflow bioblend galaxy-ie-helpers
+RUN pip install --no-cache-dir tensorflow
 
 ADD ./startup.sh /startup.sh
 
 USER root
 
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-ADD ./default_notebook_ml.ipynb /home/$NB_USER/ipython_galaxy_notebook.ipynb
+ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
 
 ENV DEBUG=false \
     NOTEBOOK_PASSWORD=none \
@@ -35,8 +35,8 @@ ENV DEBUG=false \
     DOCKER_PORT=none \
     REMOTE_HOST=none
 
-RUN chown -R $NB_USER:users /home/$NB_USER/
+RUN chown -R $NB_USER:users /home/$NB_USER
 
-WORKDIR /home/$NB_USER/
+WORKDIR /home/$NB_USER
 
 CMD /startup.sh
