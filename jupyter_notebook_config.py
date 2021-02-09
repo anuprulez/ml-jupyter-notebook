@@ -3,11 +3,11 @@
 import os
 
 c = get_config()
-c.NotebookApp.password = ''
-c.NotebookApp.ip = '0.0.0.0'
-c.NotebookApp.port = 8888
+c.ServerApp.password = ''
+c.ServerApp.ip = '0.0.0.0'
+c.ServerApp.port = 8888
 c.NotebookApp.open_browser = False
-c.NotebookApp.profile = u'default'
+c.ServerApp.profile = u'default'
 c.IPKernelApp.matplotlib = 'inline'
 
 CORS_ORIGIN = ''
@@ -32,7 +32,7 @@ c.NotebookApp.allow_origin = '*'
 c.NotebookApp.allow_credentials = True
 
 c.NotebookApp.base_url = '/ipython/'
-c.NotebookApp.base_kernel_url = '/ipython/'
+c.ServerApp.base_kernel_url = '/ipython/'
 c.NotebookApp.tornado_settings = {
     'static_url_prefix': '/ipython/static/'
 }
