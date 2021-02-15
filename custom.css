@@ -6,8 +6,13 @@ mainly to be overridden in profile/static/custom/custom.css
 This will always be an empty file in IPython
 */
 
-#saveToGalaxy {
-    color: green;
-    text-shadow: 1px 1px 1px #ccc;
+#ipython_notebook img{
+    display:block;
+    background: url(useGalaxyeu.svg) no-repeat;
+    background-size: contain;
+    width: 15%;
+    height: 10%;
+    padding-left: 233px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
-

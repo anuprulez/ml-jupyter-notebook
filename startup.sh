@@ -6,4 +6,4 @@ chown $NB_USER /home/$NB_USER/work/tensorflow_notebook.ipynb
 
 jupyter trust /home/$NB_USER/work/tensorflow_notebook.ipynb
 
-jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --no-browser
+jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root --no-browser

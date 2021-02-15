@@ -21,9 +21,7 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
 USER $NB_USER
 
 # Python packages
-RUN pip install jupyterlab==2.0.0
-RUN pip install --no-cache-dir tensorflow pynvml bokeh jupyterlab-nvdashboard onnx onnx-tf tf2onnx
-#RUN jupyter labextension install jupyterlab-nvdashboard
+RUN pip install --no-cache-dir onnx onnx-tf tf2onnx 
 
 ADD ./startup.sh /startup.sh
 
@@ -31,6 +29,12 @@ USER root
 
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
+
+RUN mkdir -p /home/$NB_USER/.jupyter/custom/
+
+ADD ./custom.js /home/$NB_USER/.jupyter/custom/custom.js
+ADD ./useGalaxyeu.svg /home/$NB_USER/.jupyter/custom/useGalaxyeu.svg
+ADD ./custom.css /home/$NB_USER/.jupyter/custom/custom.css
 
 ENV DEBUG=false \
     NOTEBOOK_PASSWORD=none \

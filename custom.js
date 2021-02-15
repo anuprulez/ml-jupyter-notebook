@@ -48,30 +48,17 @@
  * @static
  */
 
-
-    $([Jupyter.events]).on("notebook_loaded.Notebook", function () {
-      Jupyter.notebook.set_autosave_interval(5000);
-    });
-
-    IPython.keyboard_manager.command_shortcuts.add_shortcut('ctrl-k', function (event) {
-          IPython.notebook.move_cell_up();
-          return false;
-    });
-
-    IPython.keyboard_manager.command_shortcuts.add_shortcut('ctrl-j', function (event) {
-          IPython.notebook.move_cell_down();
-          return false;
-    });
-
     // Create callback
     var saveToGalaxy = function(){
-        var kernel = IPython.notebook.kernel;
+        /*var kernel = IPython.notebook.kernel;
         var name = IPython.notebook.notebook_name;
         // save notebook before sending it to the Galaxy-History
         IPython.notebook.save_notebook();
         IPython.notebook.save_checkpoint();
         command = 'put("ipython_galaxy_notebook.ipynb", "ipynb")';
-        kernel.execute(command);
+        kernel.execute(command);*/
+        console.log("New button for jupyter notebook");
+        console.log(IPython.notebook.notebook_name);
     };
     // Register button group
     Jupyter.toolbar.add_buttons_group([
@@ -80,6 +67,5 @@
             label : 'Save the current notebook in Galaxy',
             icon : 'fa-download fa',
             callback : saveToGalaxy
-         },
+        },
     ]);
-
