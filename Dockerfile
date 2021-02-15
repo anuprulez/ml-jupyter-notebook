@@ -46,10 +46,6 @@ ENV DEBUG=false \
 
 RUN chown -R $NB_USER:users /home/$NB_USER /import
 
-#COPY /home/$NB_USER/tensorflow_notebook.ipynb /import/tensorflow_notebook.ipynb
-
 WORKDIR /import 
-
-#/home/$NB_USER
 
 CMD /startup.sh
