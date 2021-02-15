@@ -27,6 +27,8 @@ ADD ./startup.sh /startup.sh
 
 USER root
 
+RUN mkdir /import
+
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
 
@@ -42,8 +44,12 @@ ENV DEBUG=false \
     DOCKER_PORT=none \
     REMOTE_HOST=none
 
-RUN chown -R $NB_USER:users /home/$NB_USER
+RUN chown -R $NB_USER:users /home/$NB_USER /import
 
-WORKDIR /home/$NB_USER/work
+#COPY /home/$NB_USER/tensorflow_notebook.ipynb /import/tensorflow_notebook.ipynb
+
+WORKDIR /import 
+
+#/home/$NB_USER
 
 CMD /startup.sh

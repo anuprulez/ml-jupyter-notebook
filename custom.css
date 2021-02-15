@@ -6,13 +6,16 @@ mainly to be overridden in profile/static/custom/custom.css
 This will always be an empty file in IPython
 */
 
+#ipython_notebook {
+    height: 40px !important;
+}
+
 #ipython_notebook img{
     display:block;
     background: url(useGalaxyeu.svg) no-repeat;
     background-size: contain;
-    width: 15%;
-    height: 10%;
-    padding-left: 233px;
+    height: 30px;
+    padding-left: 143px;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
