@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#cp /home/$NB_USER/tensorflow_notebook.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
-#chown $NB_USER /home/$NB_USER/tensorflow_notebook.ipynb
-#jupyter trust /home/$NB_USER/tensorflow_notebook.ipynb
-
 if [ ! -f /import/tensorflow_notebook.ipynb ]; then
     cp /home/$NB_USER/tensorflow_notebook.ipynb /import/tensorflow_notebook.ipynb
     chown $NB_USER /import/tensorflow_notebook.ipynb
