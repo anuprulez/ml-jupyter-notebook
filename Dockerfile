@@ -1,6 +1,8 @@
-# Jupyter container used for Tensorflow IPython Notebook
-
+# Juipyter container used for Tensorflow
+#
 FROM jupyter/tensorflow-notebook:latest
+# tensorflow/tensorflow:latest-gpu-jupyter 
+# jupyter/tensorflow-notebook:latest
 
 MAINTAINER Anup Kumar, anup.rulez@gmail.com
 
@@ -13,7 +15,7 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
     apt-transport-https python-dev libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
     build-essential libblas-dev liblapack-dev gfortran libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
     libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common octave \
-    protobuf-compiler libprotoc-dev \
+    protobuf-compiler libprotoc-dev nvidia-container-runtime \
     # IHaskell dependencies
     zlib1g-dev libtinfo-dev libcairo2-dev libpango1.0-dev && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -21,7 +23,13 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
 USER $NB_USER
 
 # Python packages
-RUN pip install --no-cache-dir onnx onnx-tf tf2onnx 
+#RUN conda config --add channels conda-forge && \
+#    conda config --add channels anaconda && \
+#    conda install --yes --quiet \
+#    tensorflow-gpu && \
+#    conda clean -yt
+RUN pip install --no-cache-dir tensorflow-gpu onnx onnx-tf
+# tf2onn
 
 ADD ./startup.sh /startup.sh
 
