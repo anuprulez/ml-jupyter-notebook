@@ -15,19 +15,17 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
     protobuf-compiler libprotoc-dev \
     # IHaskell dependencies
     zlib1g-dev libtinfo-dev libcairo2-dev libpango1.0-dev && \
-    
-    ################ Nvidia driver
+    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+################################# Nvidia driver
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg2 curl ca-certificates && \
     curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - && \
     echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
     echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get purge --autoremove -y curl && \
-    
-    ############### Nvidia driver
-    
-    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-################################# Nvidia driver
+rm -rf /var/lib/apt/lists/*
 
 ENV CUDA_VERSION 10.1.243
 ENV CUDA_PKG_VERSION 10-1=$CUDA_VERSION-1
