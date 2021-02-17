@@ -37,29 +37,33 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ln -s cuda-10.1 /usr/local/cuda && \
         rm -rf /var/lib/apt/lists/*
 
-RUN echo "/usr/local/cuda/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
-    echo "/usr/local/cuda/lib64" >> /etc/ld.so.conf.d/nvidia.conf
+#RUN apt install --reinstall libcublas10
+
+RUN echo "/usr/local/cuda-10.1/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
+    echo "/usr/local/cuda-10.1/lib64" >> /etc/ld.so.conf.d/nvidia.conf
 
 #ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 #ENV LD_LIBRARY_PATH
-RUN export PATH=${PATH}:/usr/local/cuda/bin 
-RUN export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
+#RUN export PATH=/usr/local/cuda-10.1/bin:/usr/local/cuda/bin:$PATH
+#RUN export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda-10.1/lib64
+
+#RUN export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.1/lib64:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda-10.2/lib64:$LD_LIBRARY_PATH
 
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 #ENV NVIDIA_REQUIRE_CUDA "cuda>=11.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=396,driver<397 brand=tesla,driver>=450,driver<451"
-ENV NVIDIA_REQUIRE_CUDA "cuda>=10.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=410,driver<451"
+#ENV NVIDIA_REQUIRE_CUDA "cuda>=10.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=410,driver<451"
 
-ENV CUDA_HOME /usr/local/cuda
+ENV CUDA_HOME /usr/local/cuda-10.1
 
-# ENV NCCL_VERSION 2.4.8
+#ENV NCCL_VERSION 2.4.8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    cuda-10-1 \
+    #cuda-10-1 \
     cuda-libraries-$CUDA_PKG_VERSION \
     cuda-nvtx-$CUDA_PKG_VERSION && \
-    #libnccl2=$NCCL_VERSION-1+cuda10.0 && \
+    #libnccl2=$NCCL_VERSION-1+cuda10.1 && \
     #apt-mark hold libnccl2 && \
     rm -rf /var/lib/apt/lists/*
     
@@ -71,19 +75,34 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cuda-minimal-build-$CUDA_PKG_VERSION && \
     rm -rf /var/lib/apt/lists/*
 
-ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+ENV LIBRARY_PATH /usr/local/cuda-10.1/lib64/stubs
+
+#ENV CUDNN_VERSION 8.0.4.30
+#LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
+
+#RUN apt-get install --no-install-recommends \
+#    cuda-10-1 \
+#    ibcublas10 \
+#    libcudnn7=7.6.5.32-1+cuda10.1  \
+#    libcudnn7-dev=7.6.5.32-1+cuda10.1
+
+#RUN apt-get install -y --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1 \
+#    libnvinfer-dev=6.0.1-1+cuda10.1 \
+#    libnvinfer-plugin6=6.0.1-1+cuda10.1
 
 ENV CUDNN_VERSION 8.0.4.30
 LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    #cuda-10-1 \
+    cuda-10-1 \
     libcudnn8=$CUDNN_VERSION-1+cuda10.1  \
     libcudnn8-dev=$CUDNN_VERSION-1+cuda10.1 \
-    #libcudnn8=$CUDNN_VERSION-1+cuda10.1 \
-    #libcudnn8-dev=$CUDNN_VERSION-1+cuda10.1 \
 && \
     apt-mark hold libcudnn8 && \
     rm -rf /var/lib/apt/lists/*
+
+RUN export PATH=/usr/local/cuda-10.1/bin:/usr/local/cuda/bin:$PATH
+RUN export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.1/lib64:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda-10.2/lib64:$LD_LIBRARY_PATH
 
 ################################################
 
