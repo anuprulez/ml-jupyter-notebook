@@ -33,7 +33,7 @@ ENV CUDA_PKG_VERSION 10-1=$CUDA_VERSION-1
 RUN apt-get update && apt-get install -y --no-install-recommends \
     cuda-cudart-$CUDA_PKG_VERSION \
     cuda-compat-10-1 \
-    uda-libraries-$CUDA_PKG_VERSION \
+    cuda-libraries-$CUDA_PKG_VERSION \
     cuda-nvtx-$CUDA_PKG_VERSION \
     cuda-nvml-dev-$CUDA_PKG_VERSION \
     cuda-command-line-tools-$CUDA_PKG_VERSION \
@@ -41,6 +41,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cuda-minimal-build-$CUDA_PKG_VERSION && \
     ln -s cuda-10.1 /usr/local/cuda && \
     rm -rf /var/lib/apt/lists/*
+
+# libnvinfer-dev=6.0.1-1+cuda10.1 \
+# libnvinfer-plugin6=6.0.1-1+cuda10.1
 
 #RUN apt-get update && apt-get install -y --no-install-recommends \
 #    cuda-libraries-$CUDA_PKG_VERSION \
@@ -68,6 +71,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.1/lib64:/usr/lib64:/usr/local/cuda-10.2/lib64:/usr/local/cuda-10.2/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
 
+ENV NVIDIA_VISIBLE_DEVICES=all
+
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+
+#ENV NVIDIA_REQUIRE_CUDA=cuda>=10.0 brand=tesla,driver>=418,driver<419 brand=tesla,driver>=440,driver<441 brand=tesla,driver>=450,driver<451
+ENV NVIDIA_REQUIRE_CUDA "cuda>=10.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=410,driver<411"
 ################################################
 
 USER $NB_USER
