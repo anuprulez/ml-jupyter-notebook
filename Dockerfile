@@ -101,8 +101,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-mark hold libcudnn8 && \
     rm -rf /var/lib/apt/lists/*
 
-RUN export PATH=/usr/local/cuda-10.1/bin:/usr/local/cuda/bin:$PATH
-RUN export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.1/lib64:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda-10.2/lib64:$LD_LIBRARY_PATH
+ENV PATH=/usr/local/cuda-10.1/bin:/usr/local/cuda/bin:/usr/bin:/usr/local/cuda-10.2/bin:$PATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.1/lib64:/usr/lib64:/usr/local/cuda-10.2/lib64:/usr/local/cuda-10.2/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
 
 ################################################
 
