@@ -52,15 +52,15 @@ RUN echo "/usr/local/cuda-10.1/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+
 #ENV NVIDIA_REQUIRE_CUDA "cuda>=11.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=396,driver<397 brand=tesla,driver>=450,driver<451"
 #ENV NVIDIA_REQUIRE_CUDA "cuda>=10.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=410,driver<451"
 
-ENV CUDA_HOME /usr/local/cuda-10.1
+#ENV CUDA_HOME /usr/local/cuda-10.1
 
 #ENV NCCL_VERSION 2.4.8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    #cuda-10-1 \
     cuda-libraries-$CUDA_PKG_VERSION \
     cuda-nvtx-$CUDA_PKG_VERSION && \
     #libnccl2=$NCCL_VERSION-1+cuda10.1 && \
@@ -90,16 +90,27 @@ ENV LIBRARY_PATH /usr/local/cuda-10.1/lib64/stubs
 #    libnvinfer-dev=6.0.1-1+cuda10.1 \
 #    libnvinfer-plugin6=6.0.1-1+cuda10.1
 
-ENV CUDNN_VERSION 8.0.4.30
+ENV CUDNN_VERSION 7.6.5.32
 LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    cuda-10-1 \
-    libcudnn8=$CUDNN_VERSION-1+cuda10.1  \
-    libcudnn8-dev=$CUDNN_VERSION-1+cuda10.1 \
+    cuda-10-2 \
+    libcudnn7=$CUDNN_VERSION-1+cuda10.2  \
+    libcudnn7-dev=$CUDNN_VERSION-1+cuda10.2 \
 && \
     apt-mark hold libcudnn8 && \
     rm -rf /var/lib/apt/lists/*
+
+#ENV CUDNN_VERSION 8.0.4.30
+#LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
+
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    cuda-10-1 \
+#    libcudnn8=$CUDNN_VERSION-1+cuda10.1  \
+#    libcudnn8-dev=$CUDNN_VERSION-1+cuda10.1 \
+#&& \
+#    apt-mark hold libcudnn8 && \
+#    rm -rf /var/lib/apt/lists/*
 
 ENV PATH=/usr/local/cuda-10.1/bin:/usr/local/cuda/bin:/usr/bin:/usr/local/cuda-10.2/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.1/lib64:/usr/lib64:/usr/local/cuda-10.2/lib64:/usr/local/cuda-10.2/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
