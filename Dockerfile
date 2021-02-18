@@ -45,20 +45,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # libnvinfer-dev=6.0.1-1+cuda10.1 \
 # libnvinfer-plugin6=6.0.1-1+cuda10.1
 
-#RUN apt-get update && apt-get install -y --no-install-recommends \
-#    cuda-libraries-$CUDA_PKG_VERSION \
-#    cuda-nvtx-$CUDA_PKG_VERSION && \
-#    rm -rf /var/lib/apt/lists/*
-    
-#RUN apt-get update && apt-get install -y --no-install-recommends \
-#    cuda-nvml-dev-$CUDA_PKG_VERSION \
-#    cuda-command-line-tools-$CUDA_PKG_VERSION \
-#    cuda-libraries-dev-$CUDA_PKG_VERSION \
-#    cuda-minimal-build-$CUDA_PKG_VERSION && \
-#    rm -rf /var/lib/apt/lists/*
-
-#ENV LIBRARY_PATH /usr/local/cuda-10.1/lib64/stubs
-
 ENV CUDNN_VERSION 7.6.5.32
 LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
 
@@ -75,8 +61,8 @@ ENV NVIDIA_VISIBLE_DEVICES=all
 
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
-#ENV NVIDIA_REQUIRE_CUDA=cuda>=10.0 brand=tesla,driver>=418,driver<419 brand=tesla,driver>=440,driver<441 brand=tesla,driver>=450,driver<451
 ENV NVIDIA_REQUIRE_CUDA "cuda>=10.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=410,driver<411"
+
 ################################################
 
 USER $NB_USER
