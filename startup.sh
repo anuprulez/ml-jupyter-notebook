@@ -10,4 +10,7 @@ fi
 
 jupyter trust /import/tensorflow_notebook.ipynb
 
-jupyter notebook --port=8888 --allow-root --no-browser
+#jupyter notebook --port=8888 --allow-root --no-browser
+
+jupyter lab --allow-root --no-browser
+
