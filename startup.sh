@@ -13,16 +13,16 @@
 # with the UID 1450 (preconfigured jupyter user) or a newly created 'galaxy' user
 # with the same UID/GID as /import.
 
-export PATH=/home/jovyan/.local/bin:$PATH
+export PATH=/home/$NB_USER/.local/bin:$PATH
 
 python /get_notebook.py
 
-#if [ ! -f /import/ipython_galaxy_notebook.ipynb ]; then
-#    cp /home/$NB_USER/notebook.ipynb /import/ipython_galaxy_notebook.ipynb
-#    chown $NB_USER /import/ipython_galaxy_notebook.ipynb
-#fi
+if [ ! -f /import/tensorflow_notebook.ipynb ]; then
+    cp /home/$NB_USER/tensorflow_notebook.ipynb /import/tensorflow_notebook.ipynb
+    chown $NB_USER /import/tensorflow_notebook.ipynb
+fi
 
-jupyter trust /import/ipython_galaxy_notebook.ipynb
-##/monitor_traffic.sh &
-jupyter notebook --no-browser
+jupyter trust /import/tensorflow_notebook.ipynb
+
+jupyter notebook --no-browser --allow-root
 
