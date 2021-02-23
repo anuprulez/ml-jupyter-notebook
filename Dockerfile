@@ -54,24 +54,32 @@ ADD ./startup.sh /startup.sh
 
 USER root
 
+RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir /import
 
-COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
+COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
+COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
 
 RUN mkdir -p /home/$NB_USER/.jupyter/custom/
 
-ADD ./custom.js /home/$NB_USER/.jupyter/custom/custom.js
-ADD ./useGalaxyeu.svg /home/$NB_USER/.jupyter/custom/useGalaxyeu.svg
-ADD ./custom.css /home/$NB_USER/.jupyter/custom/custom.css
+#ADD ./custom.js /home/$NB_USER/.jupyter/custom/custom.js
+#ADD ./useGalaxyeu.svg /home/$NB_USER/.jupyter/custom/useGalaxyeu.svg
+#ADD ./custom.css /home/$NB_USER/.jupyter/custom/custom.css
 
 ENV DEBUG=false \
+    GALAXY_WEB_PORT=10000 \
     NOTEBOOK_PASSWORD=none \
     CORS_ORIGIN=none \
     DOCKER_PORT=none \
+    API_KEY=none \
+    HISTORY_ID=none \
+    GALAXY_URL=none \
     REMOTE_HOST=none
 
-RUN chown -R $NB_USER:users /home/$NB_USER /import
+#RUN chown -R $NB_USER:users /home/$NB_USER /import
+
+RUN mkdir /export/ && chown -R $NB_USER:users /home/$NB_USER/ /import /export/
 
 WORKDIR /import 
 
