@@ -44,6 +44,7 @@ ENV DEBUG=false \
     API_KEY=none \
     HISTORY_ID=none \
     REMOTE_HOST=none \
+    DISABLE_AUTH=true \
     GALAXY_URL=none
 
 RUN mkdir /export/ && chown -R $NB_USER:users /home/$NB_USER /import /export/

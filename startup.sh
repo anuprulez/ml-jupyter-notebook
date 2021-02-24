@@ -24,5 +24,5 @@ fi
 
 jupyter trust /import/tensorflow_notebook.ipynb
 
-jupyter notebook --no-browser --allow-root
+jupyter lab --no-browser --allow-root
 
