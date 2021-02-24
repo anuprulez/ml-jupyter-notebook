@@ -5,9 +5,12 @@ import os
 c = get_config()
 c.ServerApp.token = ''
 c.ServerApp.password = ''
+c.NotebookApp.token = ''
+c.NotebookApp.password = ''
 c.ServerApp.ip = '0.0.0.0'
 c.ServerApp.port = 8888
-c.NotebookApp.open_browser = False
+#c.NotebookApp.open_browser = True
+c.ServerApp.open_browser = False
 c.ServerApp.profile = u'default'
 c.IPKernelApp.matplotlib = 'inline'
 
@@ -40,6 +43,9 @@ c.NotebookApp.tornado_settings = {
 if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
     c.NotebookApp.password = os.environ['NOTEBOOK_PASSWORD']
     del os.environ['NOTEBOOK_PASSWORD']
+
+#c.ServerApp.password = ''
+#c.ServerApp.password_required = False
 
 if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN

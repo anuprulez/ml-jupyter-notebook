@@ -20,6 +20,7 @@ python /get_notebook.py
 if [ ! -f /import/tensorflow_notebook.ipynb ]; then
     cp /home/$NB_USER/tensorflow_notebook.ipynb /import/tensorflow_notebook.ipynb
     chown $NB_USER /import/tensorflow_notebook.ipynb
+    echo "At the end of docker bash...======================"
 fi
 
 jupyter trust /import/tensorflow_notebook.ipynb
