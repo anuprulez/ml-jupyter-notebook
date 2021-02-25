@@ -47,10 +47,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 USER $NB_USER
 
 # Python packages
-RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 onnx onnx-tf
+RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 onnx onnx-tf bioblend galaxy-ie-helpers
 # tf2onn
 
 ADD ./startup.sh /startup.sh
+ADD ./get_notebook.py /get_notebook.py
 
 USER root
 
@@ -59,13 +60,7 @@ RUN mkdir /import
 
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
-
-RUN mkdir -p /home/$NB_USER/.jupyter/custom/
-
-ADD ./custom.js /home/$NB_USER/.jupyter/custom/custom.js
-ADD ./useGalaxyeu.svg /home/$NB_USER/.jupyter/custom/useGalaxyeu.svg
-ADD ./custom.css /home/$NB_USER/.jupyter/custom/custom.css
+ADD ./default_tensorflow_notebook.ipynb /home/$NB_USER/default_tensorflow_notebook.ipynb
 
 # ENV variables to replace conf file
 ENV DEBUG=false \
