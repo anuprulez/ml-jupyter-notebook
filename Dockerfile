@@ -12,7 +12,6 @@ USER $NB_USER
 RUN pip install --no-cache-dir tensorflow bioblend galaxy-ie-helpers
 
 ADD ./startup.sh /startup.sh
-#ADD ./monitor_traffic.sh /monitor_traffic.sh
 ADD ./get_notebook.py /get_notebook.py
 
 USER root
@@ -47,7 +46,7 @@ ENV DEBUG=false \
     DISABLE_AUTH=true \
     GALAXY_URL=none
 
-RUN mkdir /export/ && chown -R $NB_USER:users /home/$NB_USER /import /export/
+RUN chown -R $NB_USER:users /home/$NB_USER /import
 
 WORKDIR /import
 
