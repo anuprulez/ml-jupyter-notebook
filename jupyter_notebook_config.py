@@ -3,14 +3,11 @@
 import os
 
 c = get_config()
-c.ServerApp.token = ''
-c.ServerApp.password = ''
 c.NotebookApp.token = ''
 c.NotebookApp.password = ''
-c.ServerApp.ip = '0.0.0.0'
-c.ServerApp.port = 8888
-#c.NotebookApp.open_browser = True
-c.ServerApp.open_browser = False
+c.NotebookApp.ip = '0.0.0.0'
+c.NotebookApp.port = 8888
+c.NotebookApp.open_browser = True
 c.ServerApp.profile = u'default'
 c.IPKernelApp.matplotlib = 'inline'
 
@@ -32,8 +29,8 @@ headers = {
         """ % {'CORS_ORIGIN': CORS_ORIGIN, 'WS_CORS_ORIGIN': 'ws://%s' % CORS_ORIGIN_HOSTNAME}
 }
 
-c.ServerApp.allow_origin = '*'
-c.ServerApp.allow_credentials = True
+c.NotebookApp.allow_origin = '*'
+c.NotebookApp.allow_credentials = True
 
 c.NotebookApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
 c.NotebookApp.tornado_settings = {
@@ -43,9 +40,6 @@ c.NotebookApp.tornado_settings = {
 if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
     c.NotebookApp.password = os.environ['NOTEBOOK_PASSWORD']
     del os.environ['NOTEBOOK_PASSWORD']
-
-#c.ServerApp.password = ''
-#c.ServerApp.password_required = False
 
 if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
