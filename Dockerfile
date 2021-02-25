@@ -57,19 +57,9 @@ USER root
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir /import
 
-#COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
-#COPY jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-#ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
-
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 ADD ./default_notebook_ml.ipynb /home/$NB_USER/tensorflow_notebook.ipynb
-
-RUN mkdir -p /home/$NB_USER/.jupyter/custom/
-
-#ADD ./custom.js /home/$NB_USER/.jupyter/custom/custom.js
-#ADD ./useGalaxyeu.svg /home/$NB_USER/.jupyter/custom/useGalaxyeu.svg
-#ADD ./custom.css /home/$NB_USER/.jupyter/custom/custom.css
 
 RUN mkdir -p /home/$NB_USER/.jupyter/custom/
 
