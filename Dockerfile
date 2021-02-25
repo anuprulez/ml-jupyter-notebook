@@ -78,7 +78,7 @@ ENV DEBUG=false \
     REMOTE_HOST=none \
     GALAXY_URL=none
 
-RUN mkdir /export/ && chown -R $NB_USER:users /home/$NB_USER /import /export/
+RUN chown -R $NB_USER:users /home/$NB_USER /import
 
 WORKDIR /import
 
