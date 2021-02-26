@@ -8,6 +8,12 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install system libraries first as root
 USER root
 
+RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
+    apt-transport-https python-dev libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
+    build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
+    libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common && \
+    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 ENV CUDA_VERSION 11.0.3 
 
 ENV CUDA_RT 11.0.221
