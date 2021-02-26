@@ -17,7 +17,11 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
 USER $NB_USER
 
 # Python packages
-RUN pip install --no-cache-dir tensorflow bioblend galaxy-ie-helpers
+RUN pip install --no-cache-dir tensorflow \
+    bioblend \
+    galaxy-ie-helpers \
+    jupytext \ 
+    lckr-jupyterlab-variableinspector
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
