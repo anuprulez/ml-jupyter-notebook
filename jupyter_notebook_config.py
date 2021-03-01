@@ -44,4 +44,5 @@ if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
 if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
 
+c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
 c.NotebookApp.tornado_settings['headers'] = headers

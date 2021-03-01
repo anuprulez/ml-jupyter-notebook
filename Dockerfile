@@ -53,8 +53,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 USER $NB_USER
 
 # Python packages
-RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 onnx onnx-tf bioblend galaxy-ie-helpers
+RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
+    onnx onnx-tf \
+    bioblend \
+    galaxy-ie-helpers \
+    jupytext \ 
+    lckr-jupyterlab-variableinspector
 # tf2onn
+
+#RUN jupyter labextension install jupyterlab-nvdashboard
+
+#RUN jupyter lab build
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
