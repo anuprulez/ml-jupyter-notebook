@@ -50,9 +50,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && \
     rm -rf /var/lib/apt/lists/*
 
-#RUN wget -q -O - https://linux.kite.com/dls/linux/current
-
-
 # Python packages
 RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
     onnx onnx-tf \
@@ -61,8 +58,6 @@ RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
     jupytext \ 
     lckr-jupyterlab-variableinspector \
     jupyterlab_execute_time
-    #jupyterlab-kite>=2.0.2
-# tf2onn
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
