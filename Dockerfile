@@ -57,7 +57,8 @@ RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
     galaxy-ie-helpers \
     jupytext \ 
     lckr-jupyterlab-variableinspector \
-    jupyterlab_execute_time
+    jupyterlab_execute_time \
+    xeus-python
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
