@@ -50,7 +50,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_USER
+#RUN wget -q -O - https://linux.kite.com/dls/linux/current
+
 
 # Python packages
 RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
@@ -58,17 +59,13 @@ RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
     bioblend \
     galaxy-ie-helpers \
     jupytext \ 
-    lckr-jupyterlab-variableinspector
+    lckr-jupyterlab-variableinspector \
+    jupyterlab_execute_time
+    #jupyterlab-kite>=2.0.2
 # tf2onn
-
-#RUN jupyter labextension install jupyterlab-nvdashboard
-
-#RUN jupyter lab build
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
-
-USER root
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir /import
