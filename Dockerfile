@@ -59,7 +59,8 @@ RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
     lckr-jupyterlab-variableinspector \
     jupyterlab_execute_time \
     xeus-python \
-    jupyterlab-requirements
+    thamos==1.16.1 \
+    jupyterlab-requirements==0.6.1
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
