@@ -55,6 +55,8 @@ RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
     onnx onnx-tf \
     bioblend \
     galaxy-ie-helpers \
+    nbclassic==0.2.8 \
+    jupyterlab==3.0.16 \
     jupytext \ 
     lckr-jupyterlab-variableinspector \
     jupyterlab_execute_time \
