@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Python packages
-RUN pip install --no-cache-dir tensorflow-gpu==2.4.1 \
+RUN pip install --no-cache-dir tensorflow==2.4.1 \
     onnx onnx-tf \
     bioblend \
     galaxy-ie-helpers \
