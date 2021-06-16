@@ -61,15 +61,18 @@ RUN pip install --no-cache-dir tensorflow==2.4.1 \
     nbclassic \
     jupyterlab-git \
     jupyter_server \
-    jupyterlab \
+    jupyterlab==3.0.7 \
     jupytext \ 
     lckr-jupyterlab-variableinspector \
     jupyterlab_execute_time \
     xeus-python \
     jupyterlab-kernelspy \
     jupyterlab-system-monitor
+    #jupyter-tensorboard
     #thamos==1.18.3 \
     #jupyterlab-requirements==0.7.3
+
+RUN pip install elyra>=2.0.1 && jupyter lab build
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
