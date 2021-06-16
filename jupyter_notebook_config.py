@@ -44,5 +44,10 @@ if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
 if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
 
+# monitor resource usage
+c.ResourceUseDisplay.mem_limit = 4294967296
+c.ResourceUseDisplay.track_cpu_percent = True
+c.ResourceUseDisplay.cpu_limit = 2
+
 c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
 c.NotebookApp.tornado_settings['headers'] = headers
