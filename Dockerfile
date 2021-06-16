@@ -53,6 +53,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Python packages
 RUN pip install --no-cache-dir tensorflow==2.4.1 \
     onnx onnx-tf \
+    tf2onnx \
+    skl2onnx \
+    onnxruntime \
     bioblend \
     galaxy-ie-helpers \
     nbclassic \
@@ -64,7 +67,7 @@ RUN pip install --no-cache-dir tensorflow==2.4.1 \
     jupyterlab_execute_time \
     xeus-python \
     thamos==1.16.1 \
-    jupyterlab-requirements==0.6.1
+    jupyterlab-requirements==0.7.3
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
