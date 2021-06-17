@@ -17,12 +17,24 @@ export PATH=/home/$NB_USER/.local/bin:$PATH
 
 python /get_notebook.py
 
-if [ ! -f /import/default_tensorflow_notebook.ipynb ]; then
-    cp /home/$NB_USER/default_tensorflow_notebook.ipynb /import/default_tensorflow_notebook.ipynb
-    chown $NB_USER /import/default_tensorflow_notebook.ipynb
+if [ ! -f /import/home_page.ipynb ]; then
+    cp /home/$NB_USER/*.ipynb /import/
+    chown $NB_USER /import/*.ipynb
 fi
 
-jupyter trust /import/default_tensorflow_notebook.ipynb
+#cp -r /home/$NB_USER/elyra /import/
+mkdir /import/elyra/
+cp /home/$NB_USER/elyra/*.* /import/elyra/
+
+mkdir /import/data/
+cp /home/$NB_USER/data/*.tsv /import/data/
+
+#chown $NB_USER /import/elyra
+chown $NB_USER /import/elyra/*.*
+chown $NB_USER /import/data/*.tsv
+
+jupyter trust /import/*.ipynb
+jupyter trust /import/elyra/*.ipynb
 
 jupyter lab --no-browser --allow-root
 

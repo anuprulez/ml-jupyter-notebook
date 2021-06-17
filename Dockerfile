@@ -75,7 +75,7 @@ RUN pip install --no-cache-dir tensorflow==2.4.1 \
     #thamos==1.18.3 \
     #jupyterlab-requirements==0.7.3
 
-RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+#RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
@@ -85,7 +85,15 @@ RUN mkdir /import
 
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-ADD ./default_tensorflow_notebook.ipynb /home/$NB_USER/default_tensorflow_notebook.ipynb
+#ADD ./default_tensorflow_notebook.ipynb /home/$NB_USER/default_tensorflow_notebook.ipynb
+ADD ./*.ipynb /home/$NB_USER/
+
+RUN mkdir /home/$NB_USER/elyra/
+
+COPY ./elyra/*.* /home/$NB_USER/elyra/
+
+RUN mkdir /home/$NB_USER/data
+COPY ./data/*.tsv /home/$NB_USER/data/
 
 # ENV variables to replace conf file
 ENV DEBUG=false \
