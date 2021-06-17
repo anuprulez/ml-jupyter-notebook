@@ -1,0 +1,308 @@
+{
+  "doc_type": "pipeline",
+  "version": "3.0",
+  "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
+  "id": "f0dbe5a4-2537-4b24-a70c-6219c335023d",
+  "primary_pipeline": "c887edea-464e-4060-b958-415f7960cc46",
+  "pipelines": [
+    {
+      "id": "c887edea-464e-4060-b958-415f7960cc46",
+      "nodes": [
+        {
+          "id": "b88417f7-b843-4c41-b4d6-a0ddba2c05e1",
+          "type": "execution_node",
+          "op": "execute-notebook-node",
+          "app_data": {
+            "filename": "load_dataset.ipynb",
+            "runtime_image": "continuumio/anaconda3:2020.07",
+            "env_vars": [
+              "DATASET_URL=https://zenodo.org/record/4768795/files/METABRIC_RNA_Mutation.csv?download=1"
+            ],
+            "include_subdirectories": false,
+            "invalidNodeError": null,
+            "outputs": [
+              "data/METABRIC_RNA_Mutation.csv"
+            ],
+            "dependencies": [],
+            "ui_data": {
+              "label": "load_dataset.ipynb",
+              "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20viewBox%3D%220%200%2022%2022%22%3E%0A%20%20%3Cg%20class%3D%22jp-icon-warn0%20jp-icon-selectable%22%20fill%3D%22%23EF6C00%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M18.7%203.3v15.4H3.3V3.3h15.4m1.5-1.5H1.8v18.3h18.3l.1-18.3z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.5%2016.5l-5.4-4.3-5.6%204.3v-11h11z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A",
+              "x_pos": 81.00000762939453,
+              "y_pos": 181,
+              "description": "Notebook file"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "edcff0bd-ab11-4e63-bfc7-025c5ce4576b",
+          "type": "execution_node",
+          "op": "execute-notebook-node",
+          "app_data": {
+            "filename": "preprocess_dataset.ipynb",
+            "runtime_image": "continuumio/anaconda3:2020.07",
+            "env_vars": [],
+            "include_subdirectories": false,
+            "invalidNodeError": null,
+            "outputs": [
+              "data/METABRIC_RNA_Mutation_clean.csv"
+            ],
+            "dependencies": [],
+            "cpu": null,
+            "ui_data": {
+              "label": "preprocess_dataset.ipynb",
+              "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20viewBox%3D%220%200%2022%2022%22%3E%0A%20%20%3Cg%20class%3D%22jp-icon-warn0%20jp-icon-selectable%22%20fill%3D%22%23EF6C00%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M18.7%203.3v15.4H3.3V3.3h15.4m1.5-1.5H1.8v18.3h18.3l.1-18.3z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.5%2016.5l-5.4-4.3-5.6%204.3v-11h11z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A",
+              "x_pos": 277,
+              "y_pos": 265.00001525878906,
+              "description": "Notebook file"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "05a4e837-9cb6-4c9d-9db6-b413796adc64",
+                  "node_id_ref": "b88417f7-b843-4c41-b4d6-a0ddba2c05e1",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "2e40d5b9-a373-4e9f-9a16-383c1e55bb0e",
+          "type": "execution_node",
+          "op": "execute-notebook-node",
+          "app_data": {
+            "filename": "apply_ml.ipynb",
+            "runtime_image": "continuumio/anaconda3:2020.07",
+            "env_vars": [],
+            "include_subdirectories": false,
+            "outputs": [
+              "data/predicted_labels.csv",
+              "data/true_labels.csv"
+            ],
+            "dependencies": [],
+            "invalidNodeError": null,
+            "ui_data": {
+              "label": "apply_ml.ipynb",
+              "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20viewBox%3D%220%200%2022%2022%22%3E%0A%20%20%3Cg%20class%3D%22jp-icon-warn0%20jp-icon-selectable%22%20fill%3D%22%23EF6C00%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M18.7%203.3v15.4H3.3V3.3h15.4m1.5-1.5H1.8v18.3h18.3l.1-18.3z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.5%2016.5l-5.4-4.3-5.6%204.3v-11h11z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A",
+              "x_pos": 535,
+              "y_pos": 164.99998474121094,
+              "description": "Notebook file"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "eb111f15-961e-475e-8d57-068c9eeaf362",
+                  "node_id_ref": "edcff0bd-ab11-4e63-bfc7-025c5ce4576b",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "1afc82c4-0273-4ad0-90a1-81fb18117f57",
+          "type": "execution_node",
+          "op": "execute-notebook-node",
+          "app_data": {
+            "filename": "plot_results.ipynb",
+            "runtime_image": "continuumio/anaconda3:2020.07",
+            "env_vars": [],
+            "include_subdirectories": false,
+            "outputs": [
+              "data/linear_model_performance.png"
+            ],
+            "dependencies": [],
+            "invalidNodeError": null,
+            "ui_data": {
+              "label": "plot_results.ipynb",
+              "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20viewBox%3D%220%200%2022%2022%22%3E%0A%20%20%3Cg%20class%3D%22jp-icon-warn0%20jp-icon-selectable%22%20fill%3D%22%23EF6C00%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M18.7%203.3v15.4H3.3V3.3h15.4m1.5-1.5H1.8v18.3h18.3l.1-18.3z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.5%2016.5l-5.4-4.3-5.6%204.3v-11h11z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A",
+              "x_pos": 730.0000076293945,
+              "y_pos": 258,
+              "description": "Notebook file"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "caea3e2f-a1a7-45d6-aa50-7e06270f21a1",
+                  "node_id_ref": "2e40d5b9-a373-4e9f-9a16-383c1e55bb0e",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "app_data": {
+        "ui_data": {
+          "comments": [
+            {
+              "id": "8dae2be3-96c6-46ce-9730-a3b3536680a4",
+              "x_pos": 96.82305075905552,
+              "y_pos": 90.70125182601049,
+              "width": 130.3719024658203,
+              "height": 35.388427734375,
+              "class_name": "d3-comment-rect",
+              "content": "Load raw dataset",
+              "associated_id_refs": [
+                {
+                  "node_ref": "b88417f7-b843-4c41-b4d6-a0ddba2c05e1"
+                }
+              ]
+            },
+            {
+              "id": "91a7bd0f-8a37-4cfc-a230-55ebaaf9e485",
+              "x_pos": 263.76520468971955,
+              "y_pos": 351.031825861655,
+              "width": 191.5289306640625,
+              "height": 45.3057861328125,
+              "class_name": "d3-comment-rect",
+              "content": "Clean raw dataset by removing empty values",
+              "associated_id_refs": [
+                {
+                  "node_ref": "edcff0bd-ab11-4e63-bfc7-025c5ce4576b"
+                }
+              ]
+            },
+            {
+              "id": "00591527-b827-42d2-849b-52be951fd022",
+              "x_pos": 524.9221947409891,
+              "y_pos": 76.65165313216283,
+              "width": 175,
+              "height": 42,
+              "class_name": "d3-comment-rect",
+              "content": "Use a linear classifier to learn and predict labels",
+              "associated_id_refs": [
+                {
+                  "node_ref": "2e40d5b9-a373-4e9f-9a16-383c1e55bb0e"
+                }
+              ]
+            },
+            {
+              "id": "569927fa-c254-46f1-a8d4-d8e478866f8b",
+              "x_pos": 725.7486720439817,
+              "y_pos": 342.7673605296238,
+              "width": 175,
+              "height": 51,
+              "class_name": "d3-comment-rect",
+              "content": "Visualise prediction performance using confusion matrix plot",
+              "associated_id_refs": [
+                {
+                  "node_ref": "1afc82c4-0273-4ad0-90a1-81fb18117f57"
+                }
+              ]
+            }
+          ]
+        },
+        "version": 3
+      },
+      "runtime_ref": ""
+    }
+  ],
+  "schemas": []
+}
