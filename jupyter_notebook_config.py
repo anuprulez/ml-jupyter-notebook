@@ -45,9 +45,9 @@ if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
 
 # monitor resource usage
-c.ResourceUseDisplay.mem_limit = 4294967296
+c.ResourceUseDisplay.mem_limit = 8589934592
 c.ResourceUseDisplay.track_cpu_percent = True
-c.ResourceUseDisplay.cpu_limit = 2
+c.ResourceUseDisplay.cpu_limit = 4
 
 c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
 c.NotebookApp.tornado_settings['headers'] = headers

@@ -67,8 +67,11 @@ RUN pip install --no-cache-dir tensorflow==2.4.1 \
     jupyterlab_execute_time \
     xeus-python \
     jupyterlab-kernelspy \
-    jupyterlab-system-monitor
-    #jupyter-tensorboard
+    jupyterlab-system-monitor \
+    jupyterlab-fasta \
+    jupyterlab-geojson \
+    jupyterlab-logout \
+    jupyterlab-topbar
     #thamos==1.18.3 \
     #jupyterlab-requirements==0.7.3
 
