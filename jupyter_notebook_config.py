@@ -32,7 +32,7 @@ headers = {
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.allow_credentials = True
 
-c.NotebookApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
+c.ServerApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
 c.NotebookApp.tornado_settings = {
     'static_url_prefix': '%s/ipython/static/' % os.environ.get('PROXY_PREFIX', '')
 }

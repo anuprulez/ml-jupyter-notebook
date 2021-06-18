@@ -1,6 +1,10 @@
 # Jupyter container used for Tensorflow
 FROM jupyter/tensorflow-notebook:latest
 
+#FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+
+#FROM tensorflow/tensorflow:latest-gpu-jupyter
+
 MAINTAINER Anup Kumar, anup.rulez@gmail.com
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,54 +13,46 @@ ENV DEBIAN_FRONTEND noninteractive
 USER root
 
 RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
-    apt-transport-https python3.8-dev libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
+    apt-transport-https python-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
     build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
-    libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common && \
+    libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common gnupg2 curl ca-certificates && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV CUDA_VERSION 11.0.3 
 
-ENV CUDA_RT 11.0.221
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+RUN wget "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb"
+RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add -
+RUN dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb
+#RUN apt-key add /var/cuda-repo-ubuntu2004-11-0-local/7fa2af80.pub
 
-ENV CUDA_PKG_VERSION 11-0=$CUDA_RT-1  
-
-ENV CUDNN_VERSION 8.0.5.39 
-
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.2/lib64:/usr/local/cuda-10.1/lib64//usr/local/cuda-11.0/lib64:$LD_LIBRARY_PATH
-
-ENV NVIDIA_VISIBLE_DEVICES=all
-
-ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-
-ENV PYTHONPATH=/usr/lib/python3.8:$PYTHONPATH
-
-ENV PATH=/usr/lib/python3.8:$PATH
-
-# Package location Ubuntu 20.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gnupg2 curl ca-certificates && \
-    curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add - && \
-    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
-    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64/ /" > /etc/apt/sources.list.d/nvidia-ml.list && \
-    apt-get purge --autoremove -y curl && \
+    cuda-11-3 && \
+    ln -s cuda-11.3 /usr/local/cuda && \
     rm -rf /var/lib/apt/lists/*
 
-# Install CUDA
-RUN apt-get update && apt-get install -y --no-install-recommends \
-     cuda-11-0 \
-     cuda-cudart-$CUDA_PKG_VERSION && \
-     ln -s cuda-11.0 /usr/local/cuda && \
-     rm -rf /var/lib/apt/lists/*
+#ENV CUDNN_VERSION 8.2.0.53 #8.0.5.39 
 
-# Install cuDNN
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libcudnn8=$CUDNN_VERSION-1+cuda11.0 \
-    libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && \
+RUN apt-get update && apt-get install -y --no-install-recommends && \
+#    libcudnn8=$CUDNN_VERSION-1+cuda11.3 \
+#    libcudnn8-dev=$CUDNN_VERSION-1+cuda11.3 && \
     rm -rf /var/lib/apt/lists/*
+
+RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.2.0.53-1+cuda11.3_amd64.deb"
+RUN dpkg -i libcudnn8_8.2.0.53-1+cuda11.3_amd64.deb
+
+RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.0.53-1+cuda11.3_amd64.deb"
+RUN dpkg -i libcudnn8-dev_8.2.0.53-1+cuda11.3_amd64.deb
+
+#RUN wget "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb"
+
+#RUN ldconfig -p | grep cudnn
+
+#RUN nvidia-smi
 
 # Python packages
 RUN pip install --no-cache-dir \
-    tensorflow==2.4.1 \
+    tensorflow-gpu==2.5.0 \
     onnx onnx-tf \
     tf2onnx \
     skl2onnx \
