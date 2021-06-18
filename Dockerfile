@@ -85,11 +85,13 @@ RUN mkdir /import
 
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-#ADD ./default_tensorflow_notebook.ipynb /home/$NB_USER/default_tensorflow_notebook.ipynb
+
 ADD ./*.ipynb /home/$NB_USER/
 
+RUN mkdir /home/$NB_USER/notebooks/
 RUN mkdir /home/$NB_USER/elyra/
 
+COPY ./notebooks/*.ipynb /home/$NB_USER/notebooks/
 COPY ./elyra/*.* /home/$NB_USER/elyra/
 
 RUN mkdir /home/$NB_USER/data

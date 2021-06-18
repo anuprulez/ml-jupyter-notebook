@@ -29,6 +29,9 @@ cp /home/$NB_USER/elyra/*.* /import/elyra/
 mkdir /import/data/
 cp /home/$NB_USER/data/*.tsv /import/data/
 
+mkdir /import/notebooks/
+cp /home/$NB_USER/notebooks/*.ipynb /import/notebooks/
+
 #chown $NB_USER /import/elyra
 chown $NB_USER /import/elyra/*.*
 chown $NB_USER /import/data/*.tsv
