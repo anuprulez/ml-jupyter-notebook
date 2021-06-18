@@ -71,7 +71,8 @@ RUN pip install --no-cache-dir tensorflow==2.4.1 \
     jupyterlab-fasta \
     jupyterlab-geojson \
     jupyterlab-logout \
-    jupyterlab-topbar
+    jupyterlab-topbar \
+    jupyterlab_nvdashboard
     #thamos==1.18.3 \
     #jupyterlab-requirements==0.7.3
 
