@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 USER root
 
 RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
-    apt-transport-https python3.8-dev libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
+    apt-transport-https python-dev libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
     build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
     libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -27,10 +27,6 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda-10.2/lib64:/usr/local/
 ENV NVIDIA_VISIBLE_DEVICES=all
 
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-
-ENV PYTHONPATH=/usr/lib/python3.8:$PYTHONPATH
-
-ENV PATH=/usr/lib/python3.8:$PATH
 
 # Package location Ubuntu 20.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -81,7 +77,7 @@ RUN pip install --no-cache-dir \
     #thamos==1.18.3 \
     #jupyterlab-requirements==0.7.3
 
-#RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
