@@ -14,13 +14,16 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
     libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common gnupg2 curl ca-certificates && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
+# Download OS pin
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
 RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+
+# Download and install OS for CUDA
 RUN wget "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb"
-RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add -
+RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add
 RUN dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb
 
+# Install CUDA
 RUN apt-get update && apt-get install -y --no-install-recommends \
     cuda-11-3 && \
     ln -s cuda-11.3 /usr/local/cuda && \
@@ -29,6 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
+# Install cuDNN packages
 RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.2.0.53-1+cuda11.3_amd64.deb"
 RUN dpkg -i libcudnn8_8.2.0.53-1+cuda11.3_amd64.deb
 
