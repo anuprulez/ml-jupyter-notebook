@@ -33,11 +33,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
 # Install cuDNN packages
-RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.2.0.53-1+cuda11.3_amd64.deb"
-RUN dpkg -i libcudnn8_8.2.0.53-1+cuda11.3_amd64.deb
+RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb"
+RUN dpkg -i libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb
 
-RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.0.53-1+cuda11.3_amd64.deb"
-RUN dpkg -i libcudnn8-dev_8.2.0.53-1+cuda11.3_amd64.deb
+RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb"
+RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
 
 # Python packages
 RUN pip install --no-cache-dir \
@@ -51,7 +51,7 @@ RUN pip install --no-cache-dir \
     nbclassic \
     jupyterlab-git \
     jupyter_server \
-    jupyterlab==3.0.7 \
+    jupyterlab \
     jupytext \ 
     lckr-jupyterlab-variableinspector \
     jupyterlab_execute_time \
