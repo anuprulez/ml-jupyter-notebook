@@ -1,4 +1,4 @@
-# Docker container for Tensorflow in Jupyter Notebook
+# Docker container for Machine learning and deep learning in JupyterLab
 
 ## Steps to run:
 
