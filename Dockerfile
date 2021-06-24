@@ -5,8 +5,7 @@ MAINTAINER Anup Kumar, anup.rulez@gmail.com
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install system libraries first as root
-USER root
+USER root 
 
 RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
     apt-transport-https python-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
@@ -100,6 +99,7 @@ ENV DEBUG=false \
     API_KEY=none \
     HISTORY_ID=none \
     REMOTE_HOST=none \
+    DISABLE_AUTH=true \
     GALAXY_URL=none
 
 RUN chown -R $NB_USER:users /home/$NB_USER /import

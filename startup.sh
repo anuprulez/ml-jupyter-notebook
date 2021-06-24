@@ -22,7 +22,6 @@ if [ ! -f /import/home_page.ipynb ]; then
     chown $NB_USER /import/*.ipynb
 fi
 
-#cp -r /home/$NB_USER/elyra /import/
 mkdir /import/elyra/
 cp /home/$NB_USER/elyra/*.* /import/elyra/
 
@@ -39,6 +38,5 @@ chown $NB_USER /import/data/*.tsv
 jupyter trust /import/*.ipynb
 jupyter trust /import/elyra/*.ipynb
 
-#jupyter lab --no-browser --allow-root
 jupyter lab --no-browser --allow-root
 
