@@ -32,7 +32,7 @@ headers = {
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.allow_credentials = True
 
-c.NotebookApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
+c.ServerApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
 c.NotebookApp.tornado_settings = {
     'static_url_prefix': '%s/ipython/static/' % os.environ.get('PROXY_PREFIX', '')
 }
@@ -43,6 +43,11 @@ if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
 
 if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
+
+# monitor resource usage
+c.ResourceUseDisplay.mem_limit = 34359738368
+c.ResourceUseDisplay.track_cpu_percent = True
+c.ResourceUseDisplay.cpu_limit = 20
 
 c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
 c.NotebookApp.tornado_settings['headers'] = headers
