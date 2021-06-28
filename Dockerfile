@@ -40,7 +40,7 @@ RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
 
 # Python packages
 RUN pip install --no-cache-dir \
-    tensorflow==2.5.0 \
+    tensorflow-gpu==2.5.0 \
     onnx onnx-tf \
     tf2onnx \
     skl2onnx \
