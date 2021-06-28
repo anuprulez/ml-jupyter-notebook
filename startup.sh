@@ -37,6 +37,7 @@ chown $NB_USER /import/data/*.tsv
 
 jupyter trust /import/*.ipynb
 jupyter trust /import/elyra/*.ipynb
+jupyter trust /import/notebooks/*.ipynb
 
 jupyter lab --no-browser --allow-root
 
