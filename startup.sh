@@ -39,5 +39,5 @@ jupyter trust /import/*.ipynb
 jupyter trust /import/elyra/*.ipynb
 jupyter trust /import/notebooks/*.ipynb
 
-jupyter lab --no-browser --allow-root
+jupyter lab --no-browser --allow-root --VoilaConfiguration.enable_nbextensions=True
 
