@@ -62,13 +62,14 @@ RUN pip install --no-cache-dir \
     jupyterlab-logout \
     jupyterlab-topbar \
     jupyterlab_nvdashboard \
-    voila \
     bqplot \
     aquirdturtle_collapsible_headings
     #thamos==1.18.3 \
     #jupyterlab-requirements==0.7.3
 
 RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+
+RUN pip install --no-cache-dir voila
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
