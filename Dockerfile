@@ -77,7 +77,7 @@ ADD ./get_notebook.py /get_notebook.py
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir /import
 
-COPY ./get_dynamic_code.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
+COPY ./galaxy_script_job.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/01-load.py
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 
