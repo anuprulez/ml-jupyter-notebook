@@ -28,7 +28,7 @@ def run_dynamic_code(script_path, server, key, new_history_name="ml_analysis", t
         f_obj.write(notebook_script)
     # upload script
     uploaded_dataset = gi.tools.upload_file(target_file_name, new_history["id"])
-    sleep(20)
+    sleep(40)
     hist_id = new_history["id"]
     uploaded_file_path = uploaded_dataset["outputs"][0]["id"]
     tool_run = gi.tools.run_tool(hist_id, tool_name, {"inputs": {"select_file": uploaded_file_path}})
