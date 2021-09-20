@@ -59,7 +59,6 @@ RUN pip install --no-cache-dir \
     jupyterlab-system-monitor \
     jupyterlab-fasta \
     jupyterlab-geojson \
-    jupyterlab-logout \
     jupyterlab-topbar \
     jupyterlab_nvdashboard \
     bqplot \
