@@ -19,6 +19,27 @@ def __check_job_status(job_client, job_id, curr_job_status, finish_message):
             sleep(5)
 
 
+def upload_script_datasets(data_dict, server, key, new_history_name="ml_analysis"):
+    new_data_dict = dict()
+    new_history = None
+    upload_message = "Uploaded code"
+    print(data_dict)
+    gi = GalaxyInstance(server, key=key)
+    history = histories.HistoryClient(gi)
+    job_client = jobs.JobsClient(gi)
+    new_history = history.create_history(new_history_name)
+    print(new_history["id"])
+    with open(data_dict["train_data"], "r") as fi:
+        print(fi.read())
+
+    for item in data_dict:
+        print(data_dict[item])
+        upload_job = gi.tools.upload_file(data_dict[item], new_history["id"])
+        upload_job_id = upload_job["jobs"][0]["id"]
+        upload_job_status = job_client.get_state(upload_job_id)
+        __check_job_status(job_client, upload_job_id, upload_job_status, upload_message)
+
+
 def run_script_job(script_path, server, key, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
     #connect to Galaxy
     #conn = galaxy_ie_helpers.get_galaxy_connection()
