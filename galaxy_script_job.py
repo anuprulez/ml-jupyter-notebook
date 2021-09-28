@@ -23,24 +23,33 @@ def upload_script_datasets(data_dict, server, key, new_history_name="ml_analysis
     new_data_dict = dict()
     new_history = None
     upload_message = "Uploaded code"
-    print(data_dict)
     gi = GalaxyInstance(server, key=key)
     history = histories.HistoryClient(gi)
     job_client = jobs.JobsClient(gi)
     new_history = history.create_history(new_history_name)
-    print(new_history["id"])
-    with open(data_dict["train_data"], "r") as fi:
-        print(fi.read())
-
     for item in data_dict:
-        print(data_dict[item])
         upload_job = gi.tools.upload_file(data_dict[item], new_history["id"])
         upload_job_id = upload_job["jobs"][0]["id"]
         upload_job_status = job_client.get_state(upload_job_id)
+        galaxy_url = "{}datasets/{}/display".format(server, upload_job['outputs'][0]["id"])
+        new_data_dict[item] = list()
+        new_data_dict[item].append((data_dict[item], galaxy_url))
         __check_job_status(job_client, upload_job_id, upload_job_status, upload_message)
+    return {
+        "u_job": upload_job,
+        "data_path": new_data_dict
+    }
 
 
-def run_script_job(script_path, server, key, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
+def __find_replace_paths(script_file, data_dict):
+    for item in data_dict:
+        paths = data_dict[item]
+        script_file.replace(paths[0], paths[1])
+    print(script_file)
+    return script_file
+
+
+def run_script_job(data_dict, script_path, server, key, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
     #connect to Galaxy
     #conn = galaxy_ie_helpers.get_galaxy_connection()
     #gi = conn.gi
@@ -51,6 +60,7 @@ def run_script_job(script_path, server, key, new_history_name="ml_analysis", too
     history = histories.HistoryClient(gi)
     job_client = jobs.JobsClient(gi)
     new_history = history.create_history(new_history_name)
+    # Run script
     # get script
     from nbformat import read, NO_CONVERT
     with open(script_path) as fp:
@@ -60,6 +70,7 @@ def run_script_job(script_path, server, key, new_history_name="ml_analysis", too
     notebook_script = ""
     for cell in code_cells:
         notebook_script += cell.source + "\n\n"
+    notebook_script = __find_replace_paths(notebook_script, data_dict)
     target_file_name = "target-file.py"
     with open(target_file_name, "w") as f_obj:
         f_obj.write(notebook_script)
