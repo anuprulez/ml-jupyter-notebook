@@ -38,6 +38,7 @@ def upload_script_datasets(data_dict, server, key, new_history_name="ml_analysis
     return {
         "u_job": upload_job,
         "data_path": new_data_dict
+        "history": new_history
     }
 
 
@@ -54,13 +55,25 @@ def run_script_job(data_dict, script_path, server, key, new_history_name="ml_ana
     #conn = galaxy_ie_helpers.get_galaxy_connection()
     #gi = conn.gi
     #new_history = gi.histories.create_history(new_history_name)
+    file_upload_message = "File uploaded"
     upload_message = "Uploaded code"
     execute_message = "Executed code"
     gi = GalaxyInstance(server, key=key)
     history = histories.HistoryClient(gi)
     job_client = jobs.JobsClient(gi)
+    updated_data_dict = dict()
+    new_history = None
     new_history = history.create_history(new_history_name)
-    # Run script
+    # collect all Galaxy specific URLs
+    for item in data_dict:
+        upload_job = gi.tools.upload_file(item, new_history["id"])
+        upload_job_id = upload_job["jobs"][0]["id"]
+        upload_job_status = job_client.get_state(upload_job_id)
+        galaxy_url = "{}datasets/{}/display".format(server, upload_job['outputs'][0]["id"])
+        updated_data_dict[item] = galaxy_url
+        __check_job_status(job_client, upload_job_id, upload_job_status, file_upload_message)
+
+    hist_id = new_history["id"]
     # get script
     from nbformat import read, NO_CONVERT
     with open(script_path) as fp:
@@ -70,16 +83,19 @@ def run_script_job(data_dict, script_path, server, key, new_history_name="ml_ana
     notebook_script = ""
     for cell in code_cells:
         notebook_script += cell.source + "\n\n"
-    notebook_script = __find_replace_paths(notebook_script, data_dict)
+    # replace URLs from jupyter notebook by Galaxy specific URLs 
+    notebook_script = __find_replace_paths(notebook_script, updated_data_dict)
     target_file_name = "target-file.py"
     with open(target_file_name, "w") as f_obj:
         f_obj.write(notebook_script)
+
     # upload script
-    upload_job = gi.tools.upload_file(target_file_name, new_history["id"])
+    upload_job = gi.tools.upload_file(target_file_name, hist_id)
     upload_job_id = upload_job["jobs"][0]["id"]
     upload_job_status = job_client.get_state(upload_job_id)
     __check_job_status(job_client, upload_job_id, upload_job_status, upload_message)
-    hist_id = new_history["id"]
+
+    # run script
     upload_file_path = upload_job["outputs"][0]["id"]
     code_execute_job = gi.tools.run_tool(hist_id, tool_name, {"inputs": {"select_file": upload_file_path}})
     code_execute_id = code_execute_job["jobs"][0]["id"]
