@@ -27,7 +27,7 @@ def __find_replace_paths(script_file, updated_data_dict):
     return script_file
 
 
-def run_script_job(data_dict, script_path, server, key, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
+def run_script_job(script_path, server, key, data_dict=[], new_history_name="ml_analysis", tool_name="run_jupyter_job"):
     #connect to Galaxy
     #conn = galaxy_ie_helpers.get_galaxy_connection()
     #gi = conn.gi
