@@ -1,5 +1,5 @@
 ## Jupyter container used for Tensorflow
-FROM jupyter/tensorflow-notebook:latest
+FROM jupyter/tensorflow-notebook:tensorflow-2.6.0
 
 MAINTAINER Anup Kumar, anup.rulez@gmail.com
 
@@ -40,7 +40,7 @@ RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
 
 # Python packages
 RUN pip install --no-cache-dir \
-    tensorflow-gpu==2.5.0 \
+    tensorflow-gpu \
     onnx onnx-tf \
     tf2onnx \
     skl2onnx \
@@ -63,8 +63,6 @@ RUN pip install --no-cache-dir \
     jupyterlab_nvdashboard \
     bqplot \
     aquirdturtle_collapsible_headings
-    #thamos==1.18.3 \
-    #jupyterlab-requirements==0.7.3
 
 #RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 
