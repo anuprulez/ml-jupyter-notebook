@@ -8,6 +8,7 @@ from bioblend.galaxy import jobs
 
 
 JOBS_STATUS = ["new", "queued", "running", "waiting"]
+EXTRACTED_CODE_FILE_NAME = "extracted_code.py"
 
 
 def __check_job_status(job_client, job_id, curr_job_status, finish_message):
@@ -19,34 +20,10 @@ def __check_job_status(job_client, job_id, curr_job_status, finish_message):
             sleep(5)
 
 
-def upload_script_datasets(data_dict, server, key, new_history_name="ml_analysis"):
-    new_data_dict = dict()
-    new_history = None
-    upload_message = "Uploaded code"
-    gi = GalaxyInstance(server, key=key)
-    history = histories.HistoryClient(gi)
-    job_client = jobs.JobsClient(gi)
-    new_history = history.create_history(new_history_name)
-    for item in data_dict:
-        upload_job = gi.tools.upload_file(data_dict[item], new_history["id"])
-        upload_job_id = upload_job["jobs"][0]["id"]
-        upload_job_status = job_client.get_state(upload_job_id)
-        galaxy_url = "{}datasets/{}/display".format(server, upload_job['outputs'][0]["id"])
-        new_data_dict[item] = list()
-        new_data_dict[item].append((data_dict[item], galaxy_url))
-        __check_job_status(job_client, upload_job_id, upload_job_status, upload_message)
-    return {
-        "u_job": upload_job,
-        "data_path": new_data_dict
-        "history": new_history
-    }
-
-
-def __find_replace_paths(script_file, data_dict):
-    for item in data_dict:
-        paths = data_dict[item]
-        script_file.replace(paths[0], paths[1])
-    print(script_file)
+def __find_replace_paths(script_file, updated_data_dict):
+    for item in updated_data_dict:
+        g_path = updated_data_dict[item]
+        script_file = script_file.replace(item, g_path)
     return script_file
 
 
@@ -55,7 +32,7 @@ def run_script_job(data_dict, script_path, server, key, new_history_name="ml_ana
     #conn = galaxy_ie_helpers.get_galaxy_connection()
     #gi = conn.gi
     #new_history = gi.histories.create_history(new_history_name)
-    file_upload_message = "File uploaded"
+    file_upload_message = "Data file uploaded"
     upload_message = "Uploaded code"
     execute_message = "Executed code"
     gi = GalaxyInstance(server, key=key)
@@ -72,7 +49,6 @@ def run_script_job(data_dict, script_path, server, key, new_history_name="ml_ana
         galaxy_url = "{}datasets/{}/display".format(server, upload_job['outputs'][0]["id"])
         updated_data_dict[item] = galaxy_url
         __check_job_status(job_client, upload_job_id, upload_job_status, file_upload_message)
-
     hist_id = new_history["id"]
     # get script
     from nbformat import read, NO_CONVERT
@@ -85,12 +61,12 @@ def run_script_job(data_dict, script_path, server, key, new_history_name="ml_ana
         notebook_script += cell.source + "\n\n"
     # replace URLs from jupyter notebook by Galaxy specific URLs 
     notebook_script = __find_replace_paths(notebook_script, updated_data_dict)
-    target_file_name = "target-file.py"
-    with open(target_file_name, "w") as f_obj:
+
+    with open(EXTRACTED_CODE_FILE_NAME, "w") as f_obj:
         f_obj.write(notebook_script)
 
     # upload script
-    upload_job = gi.tools.upload_file(target_file_name, hist_id)
+    upload_job = gi.tools.upload_file(EXTRACTED_CODE_FILE_NAME, hist_id)
     upload_job_id = upload_job["jobs"][0]["id"]
     upload_job_status = job_client.get_state(upload_job_id)
     __check_job_status(job_client, upload_job_id, upload_job_status, upload_message)
