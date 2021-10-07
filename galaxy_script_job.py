@@ -27,15 +27,21 @@ def __find_replace_paths(script_file, updated_data_dict):
     return script_file
 
 
-def run_script_job(script_path, server, key, data_dict=[], new_history_name="ml_analysis", tool_name="run_jupyter_job"):
-    #connect to Galaxy
-    #conn = galaxy_ie_helpers.get_galaxy_connection()
-    #gi = conn.gi
-    #new_history = gi.histories.create_history(new_history_name)
+def __get_conn(server=None, key=None):
+    gi = None
+    if server is None or key is None:
+        conn = galaxy_ie_helpers.get_galaxy_connection()
+        gi = conn.gi
+    else:
+        gi = GalaxyInstance(server, key=key)
+    return gi
+
+
+def run_script_job(script_path, data_dict=[], server=None, key=None, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
     file_upload_message = "Data file uploaded"
     upload_message = "Uploaded code"
     execute_message = "Executed code"
-    gi = GalaxyInstance(server, key=key)
+    gi = __get_conn(server, key)
     history = histories.HistoryClient(gi)
     job_client = jobs.JobsClient(gi)
     updated_data_dict = dict()
