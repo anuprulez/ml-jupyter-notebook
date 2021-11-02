@@ -66,7 +66,7 @@ def run_script_job(script_path, data_dict=[], server=None, key=None, new_history
     for cell in code_cells:
         notebook_script += cell.source + "\n\n"
     # replace URLs from jupyter notebook by Galaxy specific URLs 
-    notebook_script = __find_replace_paths(notebook_script, updated_data_dict)
+    #notebook_script = __find_replace_paths(notebook_script, updated_data_dict)
 
     with open(EXTRACTED_CODE_FILE_NAME, "w") as f_obj:
         f_obj.write(notebook_script)
@@ -79,7 +79,7 @@ def run_script_job(script_path, data_dict=[], server=None, key=None, new_history
 
     # run script
     upload_file_path = upload_job["outputs"][0]["id"]
-    code_execute_job = gi.tools.run_tool(hist_id, tool_name, {"inputs": {"select_file": upload_file_path}})
+    code_execute_job = gi.tools.run_tool(hist_id, tool_name, {"inputs": {"data_paths_dict": updated_data_dict, "select_file": upload_file_path}})
     code_execute_id = code_execute_job["jobs"][0]["id"]
     code_execute_status = job_client.get_state(code_execute_id)
     __check_job_status(job_client, code_execute_id, code_execute_status, execute_message)
