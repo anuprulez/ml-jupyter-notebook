@@ -1,4 +1,4 @@
-import galaxy_ie_helpers
+import json
 from time import sleep
 from nbformat import read, NO_CONVERT
 import bioblend
@@ -8,7 +8,9 @@ from bioblend.galaxy import jobs
 
 
 JOBS_STATUS = ["new", "queued", "running", "waiting"]
+EXTRACTED_PATHS = "extracted_paths.json"
 EXTRACTED_CODE_FILE_NAME = "extracted_code.py"
+
 
 
 def __check_job_status(job_client, job_id, curr_job_status, finish_message):
@@ -67,9 +69,12 @@ def run_script_job(script_path, data_dict=[], server=None, key=None, new_history
         notebook_script += cell.source + "\n\n"
     # replace URLs from jupyter notebook by Galaxy specific URLs 
     #notebook_script = __find_replace_paths(notebook_script, updated_data_dict)
-
+    
     with open(EXTRACTED_CODE_FILE_NAME, "w") as f_obj:
         f_obj.write(notebook_script)
+
+    with open(EXTRACTED_PATHS, "w") as p_obj:
+        p_obj.write(json.dumps(updated_data_dict))
 
     # upload script
     upload_job = gi.tools.upload_file(EXTRACTED_CODE_FILE_NAME, hist_id)
@@ -77,9 +82,17 @@ def run_script_job(script_path, data_dict=[], server=None, key=None, new_history
     upload_job_status = job_client.get_state(upload_job_id)
     __check_job_status(job_client, upload_job_id, upload_job_status, upload_message)
 
+    # upload paths file
+    upload_job_paths = gi.tools.upload_file(EXTRACTED_PATHS, hist_id)
+    upload_job_id_paths = upload_job_paths["jobs"][0]["id"]
+    upload_job_paths_status = job_client.get_state(upload_job_id_paths)
+    __check_job_status(job_client, upload_job_id_paths, upload_job_paths_status, upload_message)
+
     # run script
     upload_file_path = upload_job["outputs"][0]["id"]
-    code_execute_job = gi.tools.run_tool(hist_id, tool_name, {"inputs": {"data_paths_dict": updated_data_dict, "select_file": upload_file_path}})
+    upload_file_path_paths = upload_job_paths["outputs"][0]["id"]
+
+    code_execute_job = gi.tools.run_tool(hist_id, tool_name, {"inputs": {"data_paths_dict": upload_file_path_paths, "select_file": upload_file_path}})
     code_execute_id = code_execute_job["jobs"][0]["id"]
     code_execute_status = job_client.get_state(code_execute_id)
     __check_job_status(job_client, code_execute_id, code_execute_status, execute_message)
