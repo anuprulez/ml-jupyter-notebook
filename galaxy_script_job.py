@@ -101,7 +101,6 @@ def run_script_job(script_path, data_dict=[], server=None, key=None, new_history
     __check_job_status(job_client, code_execute_id, code_execute_status, execute_message)
 
     return {
-        "job_client": job_client, 
-        "u_job": upload_job,
+        "job_client": job_client,
         "e_job": code_execute_job
     }
