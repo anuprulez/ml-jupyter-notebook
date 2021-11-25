@@ -40,21 +40,20 @@ def __upload_file(gi, job_client, file_name, hist_id, upload_message):
     return u_job
 
 
-def run_script_job_local(script_path, data_dict=[], server=None, key=None, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
+def run_script_jobl(script_path, data_dict=[], server=None, key=None, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
     file_upload_message = "Data file uploaded"
     upload_message = "Uploaded code"
     execute_message = "Executed code"
     gi = __get_conn(server, key)
     history = histories.HistoryClient(gi)
     job_client = jobs.JobsClient(gi)
-    new_history = None
     new_history = history.create_history(new_history_name)
     hist_id = new_history["id"]
     h5_datasets = list()
-
+    notebook_script = ""
     # collect all Galaxy specific URLs
     for item in data_dict:
-        upload_job = gi.tools.upload_file(item, new_history["id"])
+        upload_job = gi.tools.upload_file(item, hist_id)
         upload_job_id = upload_job["jobs"][0]["id"]
         upload_h5_file_id = upload_job['outputs'][0]["id"]
         upload_job_status = job_client.get_state(upload_job_id)
@@ -66,7 +65,7 @@ def run_script_job_local(script_path, data_dict=[], server=None, key=None, new_h
         notebook = read(fp, NO_CONVERT)
     cells = notebook['cells']
     code_cells = [c for c in cells if c['cell_type'] == 'code']
-    notebook_script = ""
+
     for cell in code_cells:
         notebook_script += cell.source + "\n\n"
 
@@ -75,9 +74,17 @@ def run_script_job_local(script_path, data_dict=[], server=None, key=None, new_h
 
     # upload script
     upload_job_code = __upload_file(gi, job_client, EXTRACTED_CODE_FILE_NAME, hist_id, upload_message)
+
+    if len(data_dict) == 0:
+        ml_h5_dataset_paths = None
+        ml_h5_datasets = None
+    else:
+        ml_h5_datasets = h5_datasets
+        ml_h5_dataset_paths = ",".join(data_dict)
+
     code_exe_inputs = {
-        "ml_h5_dataset_paths": ",".join(data_dict),
-        "ml_h5_datasets": h5_datasets,
+        "ml_h5_dataset_paths": ml_h5_dataset_paths,
+        "ml_h5_datasets": ml_h5_datasets,
         "select_file": {"src": "hda", "id": upload_job_code["outputs"][0]["id"]}
     }
 
