@@ -1,17 +1,13 @@
 import galaxy_ie_helpers
-import json
 from time import sleep
 from nbformat import read, NO_CONVERT
-import bioblend
-from bioblend.galaxy import GalaxyInstance, histories, jobs, tools
+from bioblend.galaxy import GalaxyInstance, histories, jobs
 
 
 JOBS_STATUS = ["new", "queued", "running", "waiting"]
 ERROR_JOB_STATUS = ["error"]
-EXTRACTED_PATHS = "extracted_paths.json"
 EXTRACTED_CODE_FILE_NAME = "extracted_code.py"
 ERROR_MESSAGE = "An error occurred"
-
 
 
 def __check_job_status(job_client, job_id, curr_job_status, finish_message):
@@ -51,12 +47,10 @@ def run_script_job_local(script_path, data_dict=[], server=None, key=None, new_h
     gi = __get_conn(server, key)
     history = histories.HistoryClient(gi)
     job_client = jobs.JobsClient(gi)
-    updated_data_dict = dict()
     new_history = None
     new_history = history.create_history(new_history_name)
     hist_id = new_history["id"]
     h5_datasets = list()
-    ml_datasets = list()
 
     # collect all Galaxy specific URLs
     for item in data_dict:
@@ -64,12 +58,10 @@ def run_script_job_local(script_path, data_dict=[], server=None, key=None, new_h
         upload_job_id = upload_job["jobs"][0]["id"]
         upload_h5_file_id = upload_job['outputs'][0]["id"]
         upload_job_status = job_client.get_state(upload_job_id)
-        a = {"src": "hda", "id": upload_h5_file_id}
-        h5_datasets.append(a)
+        h5_datasets.append({"src": "hda", "id": upload_h5_file_id})
         __check_job_status(job_client, upload_job_id, upload_job_status, file_upload_message)
 
     # get script
-    from nbformat import read, NO_CONVERT
     with open(script_path) as fp:
         notebook = read(fp, NO_CONVERT)
     cells = notebook['cells']
@@ -83,7 +75,6 @@ def run_script_job_local(script_path, data_dict=[], server=None, key=None, new_h
 
     # upload script
     upload_job_code = __upload_file(gi, job_client, EXTRACTED_CODE_FILE_NAME, hist_id, upload_message)
-    
     code_exe_inputs = {
         "ml_h5_dataset_paths": ",".join(data_dict),
         "ml_h5_datasets": h5_datasets,
