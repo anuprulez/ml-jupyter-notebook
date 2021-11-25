@@ -40,7 +40,7 @@ def __upload_file(gi, job_client, file_name, hist_id, upload_message):
     return u_job
 
 
-def run_script_jobl(script_path, data_dict=[], server=None, key=None, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
+def run_script_job(script_path, data_dict=[], server=None, key=None, new_history_name="ml_analysis", tool_name="run_jupyter_job"):
     file_upload_message = "Data file uploaded"
     upload_message = "Uploaded code"
     execute_message = "Executed code"
