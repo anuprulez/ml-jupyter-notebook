@@ -68,7 +68,7 @@ RUN pip install --no-cache-dir \
     bqplot \
     aquirdturtle_collapsible_headings
 
-#RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 
 RUN pip install --no-cache-dir voila
 
