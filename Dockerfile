@@ -40,10 +40,14 @@ RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
 
 # Python packages
 RUN pip install --no-cache-dir \
-    tensorflow-gpu \
-    onnx onnx-tf \
+    tensorflow-gpu==2.7.0 \
+    onnx \
+    onnx-tf \
     tf2onnx \
     skl2onnx \
+    scikit-image \
+    opencv-python \
+    nibabel \
     onnxruntime \
     bioblend \
     galaxy-ie-helpers \
@@ -64,7 +68,7 @@ RUN pip install --no-cache-dir \
     bqplot \
     aquirdturtle_collapsible_headings
 
-#RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 
 RUN pip install --no-cache-dir voila
 

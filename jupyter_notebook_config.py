@@ -21,7 +21,7 @@ if os.environ['CORS_ORIGIN'] != 'none':
 headers = {
     'X-Frame-Options': 'ALLOWALL',
         'Content-Security-Policy': """
-            default-src 'self' %(CORS_ORIGIN)s; 
+            default-src 'self' %(CORS_ORIGIN)s;
             img-src 'self' %(CORS_ORIGIN)s;
             connect-src 'self' %(WS_CORS_ORIGIN)s;
             style-src 'unsafe-inline' 'self' %(CORS_ORIGIN)s;
