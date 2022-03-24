@@ -1,6 +1,7 @@
 # See http://ipython.org/ipython-doc/1/interactive/public_server.html for more information.
 # Configuration file for ipython-notebook.
 import os
+import psutil
 
 c = get_config()
 c.NotebookApp.token = ''
@@ -45,9 +46,9 @@ if CORS_ORIGIN:
     c.NotebookApp.allow_origin = CORS_ORIGIN
 
 # monitor resource usage
-c.ResourceUseDisplay.mem_limit = 34359738368
+c.ResourceUseDisplay.mem_limit = psutil.virtual_memory().total
 c.ResourceUseDisplay.track_cpu_percent = True
-c.ResourceUseDisplay.cpu_limit = 20
+c.ResourceUseDisplay.cpu_limit = os.cpu_count()
 
 c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
 c.NotebookApp.tornado_settings['headers'] = headers

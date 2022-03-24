@@ -40,6 +40,7 @@ RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
 
 # Python packages
 RUN pip install --no-cache-dir \
+    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     tensorflow-gpu==2.7.0 \
     onnx \
     onnx-tf \
@@ -71,6 +72,18 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 
 RUN pip install --no-cache-dir voila
+
+RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html 
+
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh 
+
+RUN conda --version
+
+RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
