@@ -1,4 +1,6 @@
 ## Jupyter container used for Tensorflow
+#FROM tensorflow/tensorflow:latest-gpu-jupyter
+
 FROM jupyter/tensorflow-notebook:tensorflow-2.6.0
 
 MAINTAINER Anup Kumar, anup.rulez@gmail.com
@@ -8,14 +10,40 @@ ENV DEBIAN_FRONTEND noninteractive
 USER root 
 
 RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
-    apt-transport-https python-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
+    apt-transport-https python3-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
     build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
     libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common gnupg2 curl ca-certificates && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Download OS pin
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+
+#RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+#RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+
+#RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+
+#RUN echo $distribution
+#
+#RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+#RUN curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+#RUN curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list
+
+#RUN apt-get update && apt-get install -y nvidia-container-runtime
+
+#RUN sudo systemctl restart docker
+
+##########
+
+#RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+#RUN curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add -
+#RUN curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+#RUN curl -s -L https://nvidia.github.io/libnvidia-container/experimental/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+#RUN sudo systemctl restart docker
+
+
+## Download OS pin
+#RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+#RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
 
 # Download and install OS for CUDA
 RUN wget "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb"
@@ -35,10 +63,40 @@ RUN apt-get update && apt-get install -y --no-install-recommends && \
 RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb"
 RUN dpkg -i libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb
 
-RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb"
-RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
+#RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb"
+#RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
+
+# Install Conda
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh 
+
+#RUN export PATH="/home/$NB_USER/opt/miniconda3/bin":$PATH
+
+#RUN conda --version
+
+RUN conda update conda
+
+#RUN conda install -c conda-forge scikit-image \
+    #voila \ 
+    #elyra \
+    #opencv \
+    #nibabel \
+    #libopencv \
+    #nbclassic \
+    #bioblend \
+    #jupyterlab
+    #bioconda \
+    #kalign2=2.04 \
+    #hhsuite=3.3.0
+
+RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0 nbclassic
 
 # Python packages
+RUN /usr/bin/python3 -m pip install --upgrade pip
+
 RUN pip install --no-cache-dir \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     tensorflow-gpu==2.7.0 \
@@ -52,7 +110,7 @@ RUN pip install --no-cache-dir \
     onnxruntime \
     bioblend \
     galaxy-ie-helpers \
-    nbclassic \
+    #nbclassic \
     jupyterlab-git \
     jupyter_server \
     jupyterlab \
@@ -69,21 +127,23 @@ RUN pip install --no-cache-dir \
     bqplot \
     aquirdturtle_collapsible_headings
 
-RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+#RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+
+#RUN jupyter lab build
 
 RUN pip install --no-cache-dir voila
 
 RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html 
 
-RUN wget \
-    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && mkdir /root/.conda \
-    && bash Miniconda3-latest-Linux-x86_64.sh -b \
-    && rm -f Miniconda3-latest-Linux-x86_64.sh 
+#RUN wget \
+#    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+#    && mkdir /root/.conda \
+#    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+#    && rm -f Miniconda3-latest-Linux-x86_64.sh 
 
-RUN conda --version
+#RUN conda --version
 
-RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+#RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
