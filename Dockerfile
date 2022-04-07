@@ -1,4 +1,4 @@
-## Jupyter container used for Tensorflow
+## Jupyter container used for Data Science and Tensorflow
 FROM jupyter/tensorflow-notebook:tensorflow-2.6.0
 
 MAINTAINER Anup Kumar, anup.rulez@gmail.com
@@ -8,40 +8,28 @@ ENV DEBIAN_FRONTEND noninteractive
 USER root 
 
 RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
-    apt-transport-https python-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
+    apt-transport-https python3-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
     build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
     libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common gnupg2 curl ca-certificates && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Download OS pin
+# Install CUDA Toolkit and CuDNN
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
 RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
 
-# Download and install OS for CUDA
-RUN wget "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb"
-RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add
-RUN dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.1-465.19.01-1_amd64.deb
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
+RUN apt-get update
+RUN apt-get -y install cuda && ln -s cuda /usr/local/cuda
 
-# Install CUDA
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    cuda-11-3 && \
-    ln -s cuda-11.3 /usr/local/cuda && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install cuDNN packages
-RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb"
-RUN dpkg -i libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb
-
-RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb"
-RUN dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
+RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.4.0.27-1+cuda11.6_amd64.deb"
+RUN dpkg -i libcudnn8_8.4.0.27-1+cuda11.6_amd64.deb
 
 # Python packages
 RUN pip install --no-cache-dir \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0 \
     onnx \
     onnx-tf \
     tf2onnx \
@@ -74,6 +62,8 @@ RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
 RUN pip install --no-cache-dir voila
 
 RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html 
+
+RUN pip install numpy==1.20.0
 
 RUN wget \
     https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
