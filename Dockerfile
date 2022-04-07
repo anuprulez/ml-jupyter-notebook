@@ -62,6 +62,8 @@ RUN conda --version
 
 RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
+RUN pip install numpy==1.20.0
+
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
 
