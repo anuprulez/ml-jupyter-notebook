@@ -1,4 +1,4 @@
-# Docker container for Machine learning and deep learning in JupyterLab
+# Customized Docker container for an accessible infrastructure for artificial intelligence
 
 ## Steps to run:
 
