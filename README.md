@@ -1,4 +1,4 @@
-#Docker container for an accessible infrastructure for artificial intelligence
+# GPU-enabled docker container with Jupyterlab for artificial intelligence
 
 ## Steps to run:
 
