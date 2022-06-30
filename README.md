@@ -1,4 +1,4 @@
-# Customized Docker container for an accessible infrastructure for artificial intelligence
+#Docker container for an accessible infrastructure for artificial intelligence
 
 ## Steps to run:
 
