@@ -60,7 +60,7 @@ RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
 
 RUN pip install --no-cache-dir voila
 
-RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html 
+RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 RUN pip install numpy==1.20.0
 
