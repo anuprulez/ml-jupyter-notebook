@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 USER root 
 
-RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
+RUN apt-get -qq update && apt-get upgrade -y && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
     apt-transport-https python3-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
     build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
     libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common gnupg2 curl ca-certificates && \
@@ -17,13 +17,12 @@ RUN apt-get -qq update && apt-get install --no-install-recommends -y libcurl4-op
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
 RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
 
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb" && dpkg -i cuda-keyring_1.0-1_all.deb && rm cuda-keyring_1.0-1_all.deb
 RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
 RUN apt-get update
-RUN apt-get -y install cuda && ln -s cuda /usr/local/cuda
+RUN apt-get -y install cuda
 
-RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libcudnn8_8.4.0.27-1+cuda11.6_amd64.deb"
-RUN dpkg -i libcudnn8_8.4.0.27-1+cuda11.6_amd64.deb
+RUN apt-get -y install libcudnn8
 
 # Python packages
 RUN pip install --no-cache-dir \
@@ -57,11 +56,11 @@ RUN pip install --no-cache-dir \
     bqplot \
     aquirdturtle_collapsible_headings
 
-RUN pip install --no-cache-dir elyra>=2.0.1 && jupyter lab build
+RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
 
 RUN pip install --no-cache-dir voila
 
-RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html 
+RUN pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 RUN pip install numpy==1.20.0
 
