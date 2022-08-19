@@ -21,7 +21,6 @@ RUN wget "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x8
 RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
 RUN apt-get update
 RUN apt-get -y install cuda
-
 RUN apt-get -y install libcudnn8
 
 # Python packages
