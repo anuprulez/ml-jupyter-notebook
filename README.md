@@ -25,6 +25,12 @@ iPython sample notebooks: https://github.com/anuprulez/gpu_jupyterlab_ct_image_s
 
 Other requirements: Docker 20.10.13, (Optional) CUDA 11.6, CUDA DNN 8
 
+License: MIT License
+
+RRID: [SCR_022695](https://scicrunch.org/resources/about/registry/SCR_022695)
+
+bioToolsID: [gpu-enabled_docker_container_with_jupyterlab_for_ai](https://bio.tools/gpu-enabled_docker_container_with_jupyterlab_for_ai)
+
 
 ## Running steps:
 
@@ -35,13 +41,6 @@ Other requirements: Docker 20.10.13, (Optional) CUDA 11.6, CUDA DNN 8
 3. Run container (on host with Nvidia GPU): `docker run -it --gpus all -p 8888:8888 -v <<path to local folder>>:/import anupkumar/docker-ml-jupyterlab:galaxy-integration-0.1`
 
 4. Open the link to the Jupyterlab (e.g. `http://<<host>>:8888/ipython/lab`)
-
-License: MIT License
-
-RRID: SCR_022695
-
-bioToolsID: gpu-enabled_docker_container_with_jupyterlab_for_ai
-
 
 ## List of packages for Machine learning and deep learning
 
