@@ -31,12 +31,15 @@ cp /home/$NB_USER/data/*.tsv /import/data/
 mkdir /import/notebooks/
 cp /home/$NB_USER/notebooks/*.ipynb /import/notebooks/
 
-#chown $NB_USER /import/elyra
+mkdir /import/usecases/
+cp /home/$NB_USER/usecases/*.ipynb /import/usecases/
+
 chown $NB_USER /import/elyra/*.*
 chown $NB_USER /import/data/*.tsv
 
 jupyter trust /import/*.ipynb
 jupyter trust /import/elyra/*.ipynb
 jupyter trust /import/notebooks/*.ipynb
+jupyter trust /import/usecases/*.ipynb
 
 jupyter lab --no-browser --allow-root 
