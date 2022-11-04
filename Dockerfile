@@ -1,5 +1,5 @@
-## Jupyter container used for Data Science and Tensorflow
-FROM jupyter/tensorflow-notebook:tensorflow-2.6.0
+FROM jupyter/tensorflow-notebook:python-3.9.6
+#FROM jupyter/minimal-notebook:python-3.9.12
 
 MAINTAINER Anup Kumar, anup.rulez@gmail.com
 
@@ -23,6 +23,19 @@ RUN apt-get update
 RUN apt-get -y install cuda
 RUN apt-get -y install libcudnn8
 
+
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh 
+
+RUN conda --version
+
+RUN mamba install -y -q -c conda-forge jupyterlab-nvdashboard jupyter_server jupyterlab jupyter_bokeh
+
+RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+
 # Python packages
 RUN pip install --no-cache-dir \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
@@ -40,39 +53,25 @@ RUN pip install --no-cache-dir \
     galaxy-ie-helpers \
     nbclassic \
     jupyterlab-git \
-    jupyter_server \
-    jupyterlab \
     jupytext \ 
     lckr-jupyterlab-variableinspector \
     jupyterlab_execute_time \
     xeus-python \
     jupyterlab-kernelspy \
     jupyterlab-system-monitor \
-    jupyterlab-fasta \
-    jupyterlab-geojson \
+    #jupyterlab-fasta \
+    #jupyterlab-geojson \
     jupyterlab-topbar \
-    jupyter_bokeh \
-    jupyterlab_nvdashboard \
     bqplot \
     aquirdturtle_collapsible_headings
 
-RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
+#RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
 
 RUN pip install --no-cache-dir voila
 
 RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
-RUN pip install numpy==1.20.0
-
-RUN wget \
-    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && mkdir /root/.conda \
-    && bash Miniconda3-latest-Linux-x86_64.sh -b \
-    && rm -f Miniconda3-latest-Linux-x86_64.sh 
-
-RUN conda --version
-
-RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+RUN pip install numpy==1.20.3
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
@@ -87,9 +86,11 @@ COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 ADD ./*.ipynb /home/$NB_USER/
 
 RUN mkdir /home/$NB_USER/notebooks/
+RUN mkdir /home/$NB_USER/usecases/
 RUN mkdir /home/$NB_USER/elyra/
 
 COPY ./notebooks/*.ipynb /home/$NB_USER/notebooks/
+COPY ./usecases/*.ipynb /home/$NB_USER/usecases/
 COPY ./elyra/*.* /home/$NB_USER/elyra/
 
 RUN mkdir /home/$NB_USER/data
