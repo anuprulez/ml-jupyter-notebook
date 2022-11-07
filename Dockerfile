@@ -74,9 +74,7 @@ RUN conda --version
 
 # Python packages
 RUN pip install --no-cache-dir \
-    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    tensorflow-gpu==2.7.0 \
-    tensorflow_probability==0.15.0 \
+    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     onnx \
     onnx-tf \
     tf2onnx \
@@ -88,6 +86,9 @@ RUN pip install --no-cache-dir \
     bioblend \
     aquirdturtle_collapsible_headings
 
+RUN pip install --no-cache-dir \
+    tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0
 
 RUN mamba install -y -q -c conda-forge -c bioconda \
     jupyterlab-nvdashboard \
@@ -104,17 +105,16 @@ RUN mamba install -y -q -c conda-forge -c bioconda \
     jupyterlab-topbar \
     matplotlib \
     seaborn \
+    "elyra[all]" \
     voila \
     bqplot
 
 
 #RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
 
-#RUN pip install --no-cache-dir voila
+RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
-#RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-
-#RUN pip install numpy==1.20.3
+RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 #RUN wget \
 #    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
