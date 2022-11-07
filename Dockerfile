@@ -65,13 +65,6 @@ RUN wget \
 
 RUN conda --version
 
-#RUN mamba install -y -q -c conda-forge -c bioconda \
-    #"elyra[all]" \
-    #voila \
-
-#RUN jupyter labextension install @voila-dashboards/jupyterlab-preview
-#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
-
 # Python packages
 RUN pip install --no-cache-dir \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
@@ -84,6 +77,7 @@ RUN pip install --no-cache-dir \
     nibabel \
     onnxruntime \
     bioblend \
+    numba \
     aquirdturtle_collapsible_headings
 
 RUN pip install --no-cache-dir \
@@ -109,24 +103,9 @@ RUN mamba install -y -q -c conda-forge -c bioconda \
     voila \
     bqplot
 
-
-#RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
-
 RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-
-#RUN wget \
-#    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-#    && mkdir /root/.conda \
-#    && bash Miniconda3-latest-Linux-x86_64.sh -b \
-#    && rm -f Miniconda3-latest-Linux-x86_64.sh 
-
-#RUN conda --version
-
-#RUN conda install -y -q cudatoolkit cudnn tensorflow-gpu 
-
-#RUN conda install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
