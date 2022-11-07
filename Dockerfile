@@ -20,7 +20,7 @@ USER root
 #    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-RUN apt-get -qq update && apt-get upgrade -y && apt-get install --no-install-recommends -y apt-transport-https software-properties-common && \     
+RUN apt-get -qq update && apt-get upgrade -y && apt-get install --no-install-recommends -y libfreetype6-dev apt-transport-https software-properties-common && \     
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
@@ -66,33 +66,8 @@ RUN wget \
 RUN conda --version
 
 #RUN mamba install -y -q -c conda-forge -c bioconda \
-#    tensorflow-gpu \
-#    tensorflow-probability \
-#    jupyterlab-nvdashboard \
-#    jupyter_server \
-#    jupyterlab \
-#    jupyter_bokeh \
-    #nbclassic \
-#    jupyterlab-git \
-    #jupytext \
-    #jupyterlab_execute_time \
-    #xeus-python \
-    #jupyterlab-kernelspy \
-#    jupyterlab-system-monitor \
-#    jupyterlab-topbar \
-#    matplotlib \
-#    seaborn
-    #bqplot \
     #"elyra[all]" \
     #voila \
-    #kalign2=2.04 \
-    #hhsuite=3.3.0 \
-    #onnx \
-    #tf2onnx \
-    #skl2onnx \
-    #scikit-image \
-    #nibabel \
-    #onnxruntime
 
 #RUN jupyter labextension install @voila-dashboards/jupyterlab-preview
 #RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
@@ -102,32 +77,36 @@ RUN pip install --no-cache-dir \
     #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0 \
-    jupyterlab \
+    onnx \
+    onnx-tf \
+    tf2onnx \
+    skl2onnx \
+    scikit-image \
+    opencv-python \
+    nibabel \
+    onnxruntime \
+    bioblend \
+    aquirdturtle_collapsible_headings
+
+
+RUN mamba install -y -q -c conda-forge -c bioconda \
     jupyterlab-nvdashboard \
     jupyter_server \
-    #onnx \
-    #onnx-tf \
-    #tf2onnx \
-    #skl2onnx \
-    #scikit-image \
-    #opencv-python \
-    #nibabel \
-    #onnxruntime \
-    bioblend \
-    galaxy-ie-helpers \
-    #nbclassic \
+    jupyterlab \
+    jupyter_bokeh \
+    nbclassic \
     jupyterlab-git \
-    #jupytext \ 
-    #lckr-jupyterlab-variableinspector \
-    jupyterlab_execute_time
-    #xeus-python \
-    #jupyterlab-kernelspy \
-    #jupyterlab-system-monitor \
-    #jupyterlab-fasta \
-    #jupyterlab-geojson \
-    #jupyterlab-topbar \
-    #bqplot \
-    #aquirdturtle_collapsible_headings
+    jupytext \
+    jupyterlab_execute_time \
+    xeus-python \
+    jupyterlab-kernelspy \
+    jupyterlab-system-monitor \
+    jupyterlab-topbar \
+    matplotlib \
+    seaborn \
+    voila \
+    bqplot
+
 
 #RUN pip install --no-cache-dir 'elyra>=2.0.1' && jupyter lab build
 
