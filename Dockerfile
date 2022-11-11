@@ -172,6 +172,11 @@ ARG NB_GID="100"
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 
+# libcurl4-openssl-dev libxml2-dev \
+#    apt-transport-https python3-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
+#    build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
+#    libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget software-properties-common gnupg2 curl ca-certificates
+
 # Instal basic utilities
 RUN apt-get update && apt-get -yq dist-upgrade \
   && apt-get -y install  apt-utils \
@@ -184,25 +189,31 @@ RUN apt-get update && apt-get -yq dist-upgrade \
         locales \
         fonts-liberation \
         build-essential \
-        emacs \
+        #emacs \
+        fonts-dejavu \
         git \
-        inkscape \
+        gnupg2 \
+        #inkscape \
         jed \
         libsm6 \
         libxext-dev \
+        libfreetype6-dev \
+        libpng-dev \
         libxrender1 \
         lmodern \
         netcat \
         pandoc \
+        pkg-config \
         python3-dev \
-        texlive-fonts-extra \
-        texlive-fonts-recommended \
+        software-properties-common \
+        #texlive-fonts-extra \
+        #texlive-fonts-recommended \
         #texlive-generic-recommended \
-        texlive-latex-base \
-        texlive-latex-extra \
-        texlive-xetex \
-        unzip \
-        nano \
+        #texlive-latex-base \
+        #texlive-latex-extra \
+        #texlive-xetex \
+        #unzip \
+        #nano \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -321,6 +332,7 @@ RUN wget \
 ENV CONDA_DIR /opt/conda
 ENV PATH=$CONDA_DIR/bin:$PATH
 
+
 RUN conda --version
 
 # Install Tini
@@ -336,14 +348,66 @@ RUN conda --version
 # Correct permissions
 # Do all this in a single RUN command to avoid duplicating all of the
 # files across image layers when the permissions change
+# Python packages
 
-RUN conda install -y -q -c conda-forge -c bioconda \
+RUN pip install --no-cache-dir \
+    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+    onnx \
+    onnx-tf \
+    tf2onnx \
+    skl2onnx \
+    scikit-image \
+    opencv-python \
+    nibabel \
+    onnxruntime \
+    bioblend \
+    numba \
+    aquirdturtle_collapsible_headings
+
+
+RUN pip install --no-cache-dir \
+    bioblend \
+    galaxy-ie-helpers \
+    tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0
+
+RUN conda install -c conda-forge mamba
+
+RUN mamba install -y -q -c conda-forge -c bioconda \
+    jupyterlab-nvdashboard \
     jupyter_server \
-    jupyterlab
+    jupyterlab \
+    jupyter_bokeh \
+    nbclassic \
+    jupyterlab-git \
+    jupytext \
+    jupyterlab_execute_time \
+    xeus-python \
+    jupyterlab-kernelspy \
+    jupyterlab-system-monitor \
+    jupyterlab-topbar \
+    matplotlib \
+    seaborn \
+    "elyra[all]" \
+    voila \
+    bqplot
 
-RUN pip install tensorflow-gpu
 
-RUN pip install jupytext
+RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+
+RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+
+
+#RUN conda install -y -q -c conda-forge -c bioconda \
+#    jupyter_server \
+#    jupyterlab
+
+
+#RUN pip install tensorflow-gpu
+
+
+#RUN pip install jupytext
+
 
 #RUN conda install -c conda-forge \
     #'notebook=5' \
