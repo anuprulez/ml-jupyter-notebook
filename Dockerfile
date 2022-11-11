@@ -206,14 +206,14 @@ RUN apt-get update && apt-get -yq dist-upgrade \
         pkg-config \
         python3-dev \
         software-properties-common \
-        #texlive-fonts-extra \
-        #texlive-fonts-recommended \
-        #texlive-generic-recommended \
-        #texlive-latex-base \
-        #texlive-latex-extra \
-        #texlive-xetex \
-        #unzip \
-        #nano \
+        texlive-fonts-extra \
+        texlive-fonts-recommended \
+        texlive-generic-recommended \
+        texlive-latex-base \
+        texlive-latex-extra \
+        texlive-xetex \
+        unzip \
+        nano \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -350,6 +350,7 @@ RUN conda --version
 # files across image layers when the permissions change
 # Python packages
 
+# Python packages
 RUN pip install --no-cache-dir \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     onnx \
@@ -362,16 +363,13 @@ RUN pip install --no-cache-dir \
     onnxruntime \
     bioblend \
     numba \
-    aquirdturtle_collapsible_headings
-
-
-RUN pip install --no-cache-dir \
     bioblend \
     galaxy-ie-helpers \
+    aquirdturtle_collapsible_headings
+
+RUN pip install --no-cache-dir \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
-
-RUN conda install -c conda-forge mamba
 
 RUN mamba install -y -q -c conda-forge -c bioconda \
     jupyterlab-nvdashboard \
@@ -392,7 +390,6 @@ RUN mamba install -y -q -c conda-forge -c bioconda \
     voila \
     bqplot
 
-
 RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
@@ -402,12 +399,9 @@ RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleap
 #    jupyter_server \
 #    jupyterlab
 
-
 #RUN pip install tensorflow-gpu
 
-
 #RUN pip install jupytext
-
 
 #RUN conda install -c conda-forge \
     #'notebook=5' \
