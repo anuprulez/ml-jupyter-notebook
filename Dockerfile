@@ -10,46 +10,57 @@ ARG NB_GID="100"
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 
-
-RUN apt-get -qq update && apt-get upgrade -y && apt-get install --no-install-recommends -y libcurl4-openssl-dev libxml2-dev \
-    apt-transport-https python3-dev python3-pip libc-dev pandoc pkg-config liblzma-dev libbz2-dev libpcre3-dev \
-    build-essential libblas-dev liblapack-dev libzmq3-dev libyaml-dev libxrender1 fonts-dejavu \
-    libfreetype6-dev libpng-dev net-tools procps libreadline-dev wget sudo locales software-properties-common gnupg2 curl ca-certificates && \
-    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+RUN apt-get update --yes && \
+    # - apt-get upgrade is run to patch known vulnerabilities in apt-get packages as
+    #   the ubuntu base image is rebuilt too seldom sometimes (less than once a month)
+    apt-get upgrade --yes && \
+    apt-get install --yes --no-install-recommends \
+    # - bzip2 is necessary to extract the micromamba executable.
+    bzip2 \
+    ca-certificates \
+    fonts-liberation \
+    locales \
+    # - pandoc is used to convert notebooks to html files
+    #   it's not present in aarch64 ubuntu image, so we install it here
+    pandoc \
+    # - run-one - a wrapper script that runs no more
+    #   than one unique  instance  of  some  command with a unique set of arguments,
+    #   we use `run-one-constantly` to support `RESTARTABLE` option
+    run-one \
+    sudo \
+    # - tini is installed as a helpful container entrypoint that reaps zombie
+    #   processes and such of the actual executable we want to start, see
+    #   https://github.com/krallin/tini#why-tini for details.
+    tini \
+    wget && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
-
-# Configure environment
 
 # Configure environment
 ENV CONDA_DIR=/opt/conda \
     SHELL=/bin/bash \
-    NB_USER=jovyan \
-    NB_UID=1000 \
-    NB_GID=100 \
+    NB_USER="${NB_USER}" \
+    NB_UID=${NB_UID} \
+    NB_GID=${NB_GID} \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8 \
-    PATH=$CONDA_DIR/bin:$PATH \
-    HOME=/home/$NB_USER
+    LANGUAGE=en_US.UTF-8
+ENV PATH="${CONDA_DIR}/bin:${PATH}" \
+    HOME="/home/${NB_USER}"
 
-
+# Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
 RUN chmod a+rx /usr/local/bin/fix-permissions
 
-
-ADD fix-permissions /usr/local/bin/fix-permissions
-RUN chmod 777 /usr/local/bin
-RUN chmod 777 /usr/local/bin/fix-permissions
-
-
+# Enable prompt color in the skeleton .bashrc before creating the default NB_USER
+# hadolint ignore=SC2016
 RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc && \
    # Add call to conda init script see https://stackoverflow.com/a/58081608/4413446
    echo 'eval "$(command conda shell.bash hook 2> /dev/null)"' >> /etc/skel/.bashrc
 
-
+# Create NB_USER with name jovyan user with UID=1000 and in the 'users' group
+# and make sure these dirs are writable by the `users` group.
 RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
@@ -60,25 +71,10 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     fix-permissions "${HOME}" && \
     fix-permissions "${CONDA_DIR}"
 
+USER ${NB_UID}
 
-RUN mkdir "/home/${NB_USER}/work" && \
-    fix-permissions "/home/${NB_USER}"
-
-
-RUN wget \
-    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && bash Miniconda3-latest-Linux-x86_64.sh -f -b -p $CONDA_DIR \
-    && rm -f Miniconda3-latest-Linux-x86_64.sh \
-    && $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
-    $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
-    $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
-    $CONDA_DIR/bin/conda install -y conda \
-    #$CONDA_DIR/bin/conda update -n base -c defaults conda \
-    #$CONDA_DIR/bin/conda update --all --quiet --yes \
-    #conda clean -tipsy && \
-    #rm -rf /home/$NB_USER/.cache/yarn \
-    && fix-permissions $CONDA_DIR \
-    && fix-permissions /home/$NB_USER
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+     /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
 ENV CONDA_DIR /opt/conda
 ENV PATH=$CONDA_DIR/bin:$PATH
@@ -86,15 +82,18 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 RUN conda --version
 
 RUN pip install  \
-    jupyter_server==1.15.0 \
-    jupyterlab \
-    jupytext \
+    #jupyter_server==1.15.0 \
+    #jupyterlab \
+    #jupytext \
     bioblend \
     galaxy-ie-helpers
 
 
+USER root 
+
 ADD ./startup.sh /startup.sh
 ADD ./get_notebook.py /get_notebook.py
+
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir /import
@@ -103,7 +102,7 @@ COPY ./galaxy_script_job.py /home/$NB_USER/.ipython/profile_default/startup/00-l
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/01-load.py
 #COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-COPY ./jupyter_lab_config.py /home/$NB_USER/.jupyter/
+#COPY ./jupyter_lab_config.py /home/$NB_USER/.jupyter/
 
 ADD ./*.ipynb /home/$NB_USER/
 
@@ -132,6 +131,8 @@ ENV DEBUG=false \
     GALAXY_URL=none
 
 RUN chown -R $NB_USER:users /home/$NB_USER /import
+
+USER ${NB_UID}
 
 WORKDIR /import
 
