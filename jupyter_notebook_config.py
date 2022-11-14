@@ -40,7 +40,7 @@ c.ServerApp.tornado_settings = {
 }
 
 if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
-    c.serverApp.password = os.environ['NOTEBOOK_PASSWORD']
+    c.ServerApp.password = os.environ['NOTEBOOK_PASSWORD']
     del os.environ['NOTEBOOK_PASSWORD']
 
 if CORS_ORIGIN:
