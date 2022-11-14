@@ -81,13 +81,53 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 
 RUN conda --version
 
-RUN pip install  \
-    #jupyter_server==1.15.0 \
-    #jupyterlab \
-    #jupytext \
-    bioblend \
-    galaxy-ie-helpers
+RUN conda install -y -q -c conda-forge -c bioconda mamba
 
+# Python packages
+#RUN pip install --no-cache-dir \
+#    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+#    onnx \
+#    onnx-tf \
+#    tf2onnx \
+#    skl2onnx \
+#    scikit-image \
+#    opencv-python \
+#    nibabel \
+#    onnxruntime \
+#    bioblend \
+#    numba \
+#    aquirdturtle_collapsible_headings
+
+RUN mamba install -y -q -c conda-forge -c bioconda \
+    jupyterlab-nvdashboard \
+    jupyter_server==1.15.0 \
+    jupyterlab \
+    jupyter_bokeh \
+    nbclassic \
+    jupyterlab-git \
+    jupytext \
+    jupyterlab_execute_time \
+    xeus-python \
+    jupyterlab-kernelspy \
+    jupyterlab-system-monitor \
+    jupyterlab-topbar \
+    matplotlib \
+    seaborn \
+    #"elyra[all]" \
+    voila \
+    bioblend \
+    galaxy-ie-helpers \
+    bqplot
+
+RUN pip install \
+    bioblend \
+    galaxy-ie-helpers \
+    tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0
+
+#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+
+#RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 USER root 
 
