@@ -17,9 +17,11 @@ RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
     # - bzip2 is necessary to extract the micromamba executable.
     bzip2 \
+    git \
     ca-certificates \
     fonts-liberation \
     locales \
+    gcc pkg-config libfreetype6-dev libfreetype-dev libfreetype6 libpng-dev g++ \
     # - pandoc is used to convert notebooks to html files
     #   it's not present in aarch64 ubuntu image, so we install it here
     pandoc \
@@ -84,21 +86,21 @@ RUN conda --version
 RUN conda install -y -q -c conda-forge -c bioconda mamba
 
 # Python packages
-#RUN pip install --no-cache-dir \
-#    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-#    onnx \
-#    onnx-tf \
-#    tf2onnx \
-#    skl2onnx \
-#    scikit-image \
-#    opencv-python \
-#    nibabel \
-#    onnxruntime \
-#    bioblend \
-#    numba \
-#    aquirdturtle_collapsible_headings
+RUN pip install \
+    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+    onnx \
+    onnx-tf \
+    tf2onnx \
+    skl2onnx \
+    scikit-image \
+    opencv-python \
+    nibabel \
+    onnxruntime \
+    bioblend \
+    numba \
+    aquirdturtle_collapsible_headings
 
-RUN mamba install -y -q -c conda-forge -c bioconda \
+RUN pip install \
     jupyterlab-nvdashboard \
     jupyter_server==1.15.0 \
     jupyterlab \
@@ -111,12 +113,10 @@ RUN mamba install -y -q -c conda-forge -c bioconda \
     jupyterlab-kernelspy \
     jupyterlab-system-monitor \
     jupyterlab-topbar \
-    matplotlib \
+    #matplotlib \
     seaborn \
-    #"elyra[all]" \
+    "elyra[all]" \
     voila \
-    bioblend \
-    galaxy-ie-helpers \
     bqplot
 
 RUN pip install \
@@ -125,9 +125,9 @@ RUN pip install \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
 
-#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
-#RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 USER root 
 
