@@ -100,16 +100,39 @@ RUN pip install \
     numba \
     aquirdturtle_collapsible_headings
 
+
+#RUN mamba install -y -q -c conda-forge \
+    #jupyterlab-nvdashboard \
+    #jupyter_server=1.15.0 \
+    #jupyterlab \
+    #jupyter_bokeh \
+    #nbclassic \
+    #jupyterlab-git \
+    #jupytext \
+    #jupyterlab_execute_time \
+    #xeus-python \
+    #jupyterlab-kernelspy \
+    #jupyterlab-system-monitor \
+    #jupyterlab-topbar \
+    #matplotlib \
+    #seaborn \
+    #"elyra[all]" \
+    #voila \
+    #bqplot
+
+RUN mamba install -y -q -c conda-forge \
+    jupyter_bokeh
+
 RUN pip install \
     jupyterlab-nvdashboard \
     jupyter_server==1.15.0 \
     jupyterlab \
-    jupyter_bokeh \
+    #jupyter_bokeh \
     nbclassic \
     jupyterlab-git \
     jupytext \
     jupyterlab_execute_time \
-    xeus-python \
+    #xeus-python \
     jupyterlab-kernelspy \
     jupyterlab-system-monitor \
     jupyterlab-topbar \
@@ -119,6 +142,7 @@ RUN pip install \
     voila \
     bqplot
 
+
 RUN pip install \
     bioblend \
     galaxy-ie-helpers \
@@ -127,7 +151,9 @@ RUN pip install \
 
 RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
-RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+RUN pip install jax jaxlib
+
+#RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 USER root 
 
