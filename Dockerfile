@@ -120,14 +120,11 @@ RUN pip install \
     #voila \
     #bqplot
 
-RUN mamba install -y -q -c conda-forge \
-    jupyter_bokeh
-
 RUN pip install \
-    jupyterlab-nvdashboard \
+    #jupyterlab-nvdashboard \
     jupyter_server==1.15.0 \
-    jupyterlab \
-    #jupyter_bokeh \
+    jupyterlab==3.3.2 \
+    #helpful_package \
     nbclassic \
     jupyterlab-git \
     jupytext \
@@ -136,12 +133,10 @@ RUN pip install \
     jupyterlab-kernelspy \
     jupyterlab-system-monitor \
     jupyterlab-topbar \
-    #matplotlib \
     seaborn \
-    "elyra[all]" \
+    elyra \
     voila \
     bqplot
-
 
 RUN pip install \
     bioblend \
@@ -152,6 +147,10 @@ RUN pip install \
 RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN pip install jax jaxlib
+
+RUN pip install bokeh==2.4.3 jupyterlab-nvdashboard
+
+#RUN jupyter labextension install jupyterlab-nvdashboard 
 
 #RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
