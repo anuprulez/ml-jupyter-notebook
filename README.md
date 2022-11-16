@@ -17,6 +17,8 @@ Galaxy tool (that runs this container): https://github.com/usegalaxy-eu/galaxy/b
 
 Data: https://zenodo.org/record/6091361 (to run sample notebooks at https://github.com/anuprulez/gpu_jupyterlab_ct_image_segmentation)
 
+How to use: Galaxy training network [tutorial](https://training.galaxyproject.org/training-material/topics/statistics/tutorials/gpu_jupyter_lab/tutorial.html)
+
 Operating system(s): Linux
 
 Programming language(s): Python, Docker, XML
