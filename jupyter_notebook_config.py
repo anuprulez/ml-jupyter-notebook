@@ -1304,7 +1304,6 @@ c.NotebookApp.tornado_settings = {
 #  Default: 300
 # c.TerminalManager.cull_interval = 300
 
-
 if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
     c.NotebookApp.password = os.environ['NOTEBOOK_PASSWORD']
     del os.environ['NOTEBOOK_PASSWORD']

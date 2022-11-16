@@ -48,6 +48,7 @@ ENV CONDA_DIR=/opt/conda \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
+
 ENV PATH="${CONDA_DIR}/bin:${PATH}" \
     HOME="/home/${NB_USER}"
 
@@ -100,59 +101,33 @@ RUN pip install \
     numba \
     aquirdturtle_collapsible_headings
 
-
-#RUN mamba install -y -q -c conda-forge \
-    #jupyterlab-nvdashboard \
-    #jupyter_server=1.15.0 \
-    #jupyterlab \
-    #jupyter_bokeh \
-    #nbclassic \
-    #jupyterlab-git \
-    #jupytext \
-    #jupyterlab_execute_time \
-    #xeus-python \
-    #jupyterlab-kernelspy \
-    #jupyterlab-system-monitor \
-    #jupyterlab-topbar \
-    #matplotlib \
-    #seaborn \
-    #"elyra[all]" \
-    #voila \
-    #bqplot
-
 RUN pip install \
-    #jupyterlab-nvdashboard \
+    nodejs \
+    jupyterlab-nvdashboard \
+    bokeh==2.4.0 \
     jupyter_server==1.15.0 \
-    jupyterlab==3.3.2 \
-    #helpful_package \
+    jupyterlab \
     nbclassic \
     jupyterlab-git \
     jupytext \
     jupyterlab_execute_time \
-    #xeus-python \
     jupyterlab-kernelspy \
     jupyterlab-system-monitor \
     jupyterlab-topbar \
+    bioblend \
+    galaxy-ie-helpers \
     seaborn \
     elyra \
     voila \
     bqplot
 
 RUN pip install \
-    bioblend \
-    galaxy-ie-helpers \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
 
 RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN pip install jax jaxlib
-
-RUN pip install bokeh==2.4.3 jupyterlab-nvdashboard
-
-#RUN jupyter labextension install jupyterlab-nvdashboard 
-
-#RUN pip install --upgrade jax==0.3.10 jaxlib==0.3.10 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 USER root 
 
@@ -165,9 +140,7 @@ RUN mkdir /import
 
 COPY ./galaxy_script_job.py /home/$NB_USER/.ipython/profile_default/startup/00-load.py
 COPY ./ipython-profile.py /home/$NB_USER/.ipython/profile_default/startup/01-load.py
-#COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
-#COPY ./jupyter_lab_config.py /home/$NB_USER/.jupyter/
 
 ADD ./*.ipynb /home/$NB_USER/
 
@@ -181,7 +154,6 @@ COPY ./elyra/*.* /home/$NB_USER/elyra/
 
 RUN mkdir /home/$NB_USER/data
 COPY ./data/*.tsv /home/$NB_USER/data/
-
 
 # ENV variables to replace conf file
 ENV DEBUG=false \
