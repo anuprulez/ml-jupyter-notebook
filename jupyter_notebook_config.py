@@ -92,7 +92,7 @@ headers = {
 #------------------------------------------------------------------------------
 ## Set the Access-Control-Allow-Credentials: true header
 #  Default: False
-c.NotebookApp.allow_credentials = True
+c.ServerApp.allow_credentials = True
 
 ## Set the Access-Control-Allow-Origin header
 #  
@@ -100,7 +100,7 @@ c.NotebookApp.allow_credentials = True
 #  
 #  Takes precedence over allow_origin_pat.
 #  Default: ''
-c.NotebookApp.allow_origin = '*'
+c.ServerApp.allow_origin = '*'
 
 ## Use a regular expression for the Access-Control-Allow-Origin header
 #  
@@ -141,7 +141,7 @@ c.NotebookApp.allow_origin = '*'
 
 ## Whether to allow the user to run the notebook as root.
 #  Default: False
-c.NotebookApp.allow_root = True
+c.ServerApp.allow_root = True
 
 ## Answer yes to any prompts.
 #  See also: JupyterApp.answer_yes
@@ -163,7 +163,7 @@ c.NotebookApp.allow_root = True
 #  
 #  Leading and trailing slashes can be omitted, and will automatically be added.
 #  Default: '/'
-c.NotebookApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
+c.ServerApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
 
 ## Specify what command to use to invoke a web browser when opening the notebook.
 #  If not specified, the default browser will be determined by the `webbrowser`
@@ -307,7 +307,7 @@ c.NotebookApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
 
 ## The IP address the notebook server will listen on.
 #  Default: 'localhost'
-c.NotebookApp.ip = '0.0.0.0'
+c.ServerApp.ip = '0.0.0.0'
 
 ## Supply extra arguments that will be passed to Jinja environment.
 #  Default: {}
@@ -520,12 +520,12 @@ c.NotebookApp.open_browser = False
 #  Setting to an empty string disables authentication altogether, which is NOT
 #  RECOMMENDED.
 #  Default: '<generated>'
-c.NotebookApp.token = ''
+c.ServerApp.token = ''
 
 ## Supply overrides for the tornado.web.Application that the Jupyter notebook
 #  uses.
 #  Default: {}
-c.NotebookApp.tornado_settings = {
+c.ServerApp.tornado_settings = {
     'static_url_prefix': '%s/ipython/static/' % os.environ.get('PROXY_PREFIX', ''),
     'headers': headers
 }
