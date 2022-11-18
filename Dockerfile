@@ -1,13 +1,13 @@
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 
-USER root
+#USER root
 
 ARG NB_USER="jovyan"
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update --yes && \
-    apt-get upgrade --yes && \
+    #apt-get upgrade --yes && \
     apt-get install --yes --no-install-recommends \
     git \
     ca-certificates \
@@ -34,7 +34,14 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
     useradd -l -m -s /bin/bash -N "${NB_USER}" && \
     mkdir -p "${CONDA_DIR}" && \
-    chown "${NB_USER}" "${CONDA_DIR}" && \
+	mkdir -p /home/$NB_USER/.ipython/profile_default/startup/ && \
+	mkdir -p /import  && \
+	mkdir -p /home/$NB_USER/notebooks/ && \
+	mkdir -p /home/$NB_USER/usecases/ && \
+	mkdir -p /home/$NB_USER/elyra/ && \
+	mkdir -p /home/$NB_USER/data && \
+    chown "${NB_USER}" "${CONDA_DIR}"  && \
+	
     chmod g+w /etc/passwd
 
 USER ${NB_USER}
@@ -47,55 +54,55 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 RUN conda --version
 
 # Python packages
-RUN pip install \
-    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    onnx==1.12.0 \
-    onnx-tf==1.10.0 \
-    tf2onnx==1.13.0 \
-    skl2onnx==1.13 \
-    scikit-image==0.19.3 \
-    opencv-python==4.6.0.66 \
-    nibabel==4.0.2 \
-    onnxruntime==1.13.1 \
-    bioblend==1.0.0 \
-    galaxy-ie-helpers==0.2.5 \
-    numba==0.56.4 \
-    aquirdturtle_collapsible_headings==3.1.0
+#RUN pip install \
+ #   "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+ #  onnx==1.12.0 \
+ #   onnx-tf==1.10.0 \
+ #  tf2onnx==1.13.0 \
+ #   skl2onnx==1.13 \
+ #   scikit-image==0.19.3 \
+ #   opencv-python==4.6.0.66 \
+ #   nibabel==4.0.2 \
+ #   onnxruntime==1.13.1 \
+ #   bioblend==1.0.0 \
+ #   galaxy-ie-helpers==0.2.5 \
+ #   numba==0.56.4 \
+ #  aquirdturtle_collapsible_headings==3.1.0
 
 RUN pip install \
     jupyterlab-nvdashboard==0.7.0 \
-    bokeh==2.4.0 \
+ #   bokeh==2.4.0 \
     jupyter_server==1.15.0 \
     jupyterlab==3.3.4 \
-    nbclassic==0.4.8 \
-    jupyterlab-git==0.39.3 \
+ #   nbclassic==0.4.8 \
+ #   jupyterlab-git==0.39.3 \
     jupytext==1.14.1 \
-    jupyterlab-execute-time==2.3.0 \
-    jupyterlab-kernelspy==3.1.0 \
-    jupyterlab-system-monitor==0.8.0 \
-    jupyterlab-topbar==0.6.1 \
-    seaborn==0.12.1 \
-    elyra==3.8.0 \
-    voila==0.3.5 \
+ #   jupyterlab-execute-time==2.3.0 \
+  #  jupyterlab-kernelspy==3.1.0 \
+   # jupyterlab-system-monitor==0.8.0 \
+    #jupyterlab-topbar==0.6.1 \
+    #seaborn==0.12.1 \
+    #elyra==3.8.0 \
+    #voila==0.3.5 \
     bqplot==0.12.36
 
-RUN pip install \
-    tensorflow-gpu==2.7.0 \
-    tensorflow_probability==0.15.0
+#RUN pip install \
+ #   tensorflow-gpu==2.7.0 \
+  #  tensorflow_probability==0.15.0
 
-RUN conda install -c conda-forge mamba
-RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+#RUN conda install -c conda-forge mamba
+#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
-RUN pip install jax==0.3.24 jaxlib==0.3.24 dm-haiku==0.0.7
+#RUN pip install jax==0.3.24 jaxlib==0.3.24 dm-haiku==0.0.7
 
-USER root 
+#USER root 
 
-RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
-RUN mkdir -p /import
-RUN mkdir -p /home/$NB_USER/notebooks/
-RUN mkdir -p /home/$NB_USER/usecases/
-RUN mkdir -p /home/$NB_USER/elyra/
-RUN mkdir -p /home/$NB_USER/data
+#RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
+#RUN mkdir -p /import
+#RUN mkdir -p /home/$NB_USER/notebooks/
+#RUN mkdir -p /home/$NB_USER/usecases/
+#RUN mkdir -p /home/$NB_USER/elyra/
+#RUN mkdir -p /home/$NB_USER/data
 
 COPY ./startup.sh /startup.sh
 COPY ./get_notebook.py /get_notebook.py
