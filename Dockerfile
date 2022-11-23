@@ -12,6 +12,7 @@ RUN apt-get update --yes && \
     gcc pkg-config libfreetype6-dev libpng-dev g++ \
     pandoc \
     sudo \
+    libffi-dev \
     wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
