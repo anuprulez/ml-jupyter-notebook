@@ -4,11 +4,11 @@ import os
 import psutil
 
 c = get_config()
-c.NotebookApp.token = ''
-c.NotebookApp.password = ''
-c.NotebookApp.ip = '0.0.0.0'
-c.NotebookApp.port = 8888
-c.NotebookApp.open_browser = True
+c.ServerApp.token = ''
+c.ServerApp.password = ''
+c.ServerApp.ip = '0.0.0.0'
+c.ServerApp.port = 8888
+c.ServerApp.open_browser = True
 c.ServerApp.profile = u'default'
 c.IPKernelApp.matplotlib = 'inline'
 
@@ -30,25 +30,25 @@ headers = {
         """ % {'CORS_ORIGIN': CORS_ORIGIN, 'WS_CORS_ORIGIN': 'ws://%s' % CORS_ORIGIN_HOSTNAME}
 }
 
-c.NotebookApp.allow_origin = '*'
-c.NotebookApp.allow_credentials = True
+c.ServerApp.allow_origin = '*'
+c.ServerApp.allow_credentials = True
 
 c.ServerApp.base_url = '%s/ipython/' % os.environ.get('PROXY_PREFIX', '')
-c.NotebookApp.tornado_settings = {
+c.ServerApp.tornado_settings = {
     'static_url_prefix': '%s/ipython/static/' % os.environ.get('PROXY_PREFIX', '')
 }
 
 if os.environ.get('NOTEBOOK_PASSWORD', 'none') != 'none':
-    c.NotebookApp.password = os.environ['NOTEBOOK_PASSWORD']
+    c.ServerApp.password = os.environ['NOTEBOOK_PASSWORD']
     del os.environ['NOTEBOOK_PASSWORD']
 
 if CORS_ORIGIN:
-    c.NotebookApp.allow_origin = CORS_ORIGIN
+    c.ServerApp.allow_origin = CORS_ORIGIN
 
 # monitor resource usage
 c.ResourceUseDisplay.mem_limit = psutil.virtual_memory().total
 c.ResourceUseDisplay.track_cpu_percent = True
 c.ResourceUseDisplay.cpu_limit = os.cpu_count()
 
-c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
-c.NotebookApp.tornado_settings['headers'] = headers
+c.ServerApp.contents_manager_class = "jupytext.TextFileContentsManager"
+c.ServerApp.tornado_settings['headers'] = headers
