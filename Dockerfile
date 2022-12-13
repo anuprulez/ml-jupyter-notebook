@@ -80,6 +80,8 @@ RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN pip install jax==0.3.24 jaxlib==0.3.24 dm-haiku==0.0.7 tensorflow-gpu==2.7.0 tensorflow_probability==0.15.0
 
+RUN pip install pyclesperanto-prototype jupyter-book jupyterlab-spellchecker
+
 USER root 
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
@@ -98,11 +100,13 @@ COPY ./jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 
 COPY ./*.ipynb /home/$NB_USER/
 
-COPY ./notebooks/*.ipynb /home/$NB_USER/notebooks/
+#COPY ./notebooks/*.ipynb /home/$NB_USER/notebooks/
+COPY ./notebooks/* /home/$NB_USER/notebooks/
 COPY ./usecases/*.ipynb /home/$NB_USER/usecases/
 COPY ./elyra/*.* /home/$NB_USER/elyra/
 
-COPY ./data/*.tsv /home/$NB_USER/data/
+#COPY ./data/*.tsv /home/$NB_USER/data/
+COPY ./data/* /home/$NB_USER/data/
 
 ENV DEBUG=false \
     GALAXY_WEB_PORT=10000 \
