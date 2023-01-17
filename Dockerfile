@@ -42,7 +42,7 @@ RUN alias python=/usr/bin/python3.8
 RUN python3.8 -m pip install --upgrade pip requests setuptools pipenv
 
 # make requests library use the Debian CA bundle (includes Zalando CA)
-ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+#ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 ENV PATH=/usr/bin/python3.8:$PATH
 
@@ -82,11 +82,38 @@ ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
 RUN python3.8 -m pip install --upgrade pip
 
+#RUN pip install \
+#    onnx==1.12.0 \
+#    onnx-tf==1.10.0 \
+#    tf2onnx==1.13.0 \
+#    skl2onnx==1.13 \
+#    scikit-image==0.19.3 \
+#    opencv-python==4.6.0.66 \
+#    nibabel==4.0.2 \
+#    onnxruntime==1.13.1 \
+#    seaborn==0.12.1 \
+    #elyra==3.8.0 \
+    #elyra==3.14.1 \
+#    voila==0.3.5 \
+#    bqplot==0.12.36
+
+#RUN pip install \
+    #onnx==1.12.0 \
+    #onnx-tf==1.10.0 \
+    #tf2onnx==1.13.0 \
+    #skl2onnx==1.13 \
+    #scikit-image==0.19.3 \
+    #opencv-python==4.6.0.66 \
+    #nibabel==4.0.2 \
+    #onnxruntime==1.13.1 \
+    #seaborn==0.12.1 \
+    #elyra==3.8.0 \
+    #voila==0.3.5 \
+    #bqplot==0.12.36
+
 # Python packages
 RUN python3.8 -m pip install \
-    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    #colabfold==1.2.0 \
-    #alphafold-colabfold==2.1.16 \
+    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     #onnx==1.12.0 \
     #onnx-tf==1.10.0 \
     #tf2onnx==1.13.0 \
@@ -113,7 +140,8 @@ RUN python3.8 -m pip install \
     #seaborn==0.12.1 \
     #elyra==3.8.0 \
     #voila==0.3.5 \
-    #bqplot==0.12.36
+    #bqplot==0.12.36 \
+    #tensorflow-gpu==2.7.0
     #pytz==2022.7 \
     #pyrsistent==0.19.2 \
     #pyparsing==3.0.9 \
@@ -139,42 +167,8 @@ RUN python3.8 -m pip install \
     #mistune==0.8.4 \
     #pathspec==0.9.0
 
-#COPY requirements.txt requirements.txt
-#RUN python3.9 -m pip install -r requirements.txt
-
-#RUN python3.9 -m pip install "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-
-#RUN python3.9 -m pip install "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-
-RUN conda install -c conda-forge mamba python==3.8
-
-#RUN mamba install -y -q -c conda-forge -c bioconda \
-    #onnx \
-    #onnx-tf \
-    #tf2onnx \
-    #skl2onnx \
-    #scikit-image \
-    #opencv \
-    #nibabel \
-    #onnxruntime \
-    #bioblend==1.0.0 \
-    #galaxy-ie-helpers====0.2.5 \
-    #numba====0.56.4 \
-    #jupyterlab-nvdashboard==0.7.0 \
-    #bokeh==2.4.0 \
-    #jupyter_server==1.15.0 \
-    #jupyterlab==3.3.4 \
-    #nbclassic==0.4.8 \
-    #jupyterlab-git==0.39.3 \
-    #jupytext==1.14.1
-    #jupyterlab-execute-time==2.3.0 \
-    #jupyterlab-kernelspy==3.1.0 \
-    #jupyterlab-system-monitor==0.8.0 \
-    #jupyterlab-topbar==0.6.1 \
-    #seaborn==0.12.1 \
-    #elyra==3.8.0 \
-    #voila==0.3.5 \
-    #bqplot==0.12.36
+#RUN conda install -c conda-forge mamba 
+#python==3.8
 
 #RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
@@ -186,17 +180,18 @@ RUN conda install -c conda-forge mamba python==3.8
 #RUN python3.9 -m pip install -q "jax[cuda]>=0.3.8,<0.4" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 # For template-based predictions also install kalign and hhsuite
 
-RUN mamba install -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+#RUN mamba install -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN python3.8 -m pip install \
-    jax==0.3.24 \
-    jaxlib==0.3.24 \
-    dm-haiku==0.0.7 \
+    #jax==0.3.24 \
+    #jaxlib==0.3.24 \
+    #dm-haiku==0.0.7 \
+    #dm-haiku==0.0.9 \
+    #tensorflow-gpu==2.7.0 \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
-    #colabfold[alphafold]
-    #tensorflow-cpu==2.7.0
-    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
+
+#RUN python3.8 -m pip uninstall tensorflow-cpu==2.7.0
 
 USER root 
 
