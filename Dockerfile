@@ -167,8 +167,7 @@ RUN python3.8 -m pip install \
     #mistune==0.8.4 \
     #pathspec==0.9.0
 
-#RUN conda install -c conda-forge mamba 
-#python==3.8
+RUN conda install -c conda-forge mamba python==3.8
 
 #RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
@@ -180,18 +179,24 @@ RUN python3.8 -m pip install \
 #RUN python3.9 -m pip install -q "jax[cuda]>=0.3.8,<0.4" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 # For template-based predictions also install kalign and hhsuite
 
-#RUN mamba install -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+RUN python3.8 -m pip install \
+    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
+
+RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
 RUN python3.8 -m pip install \
-    #jax==0.3.24 \
-    #jaxlib==0.3.24 \
+    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+    jax==0.3.24 \
+    jaxlib==0.3.24 \
     #dm-haiku==0.0.7 \
-    #dm-haiku==0.0.9 \
+    dm-haiku==0.0.9
     #tensorflow-gpu==2.7.0 \
-    tensorflow-gpu==2.7.0 \
-    tensorflow_probability==0.15.0
+    #tensorflow-gpu==2.7.0 \
+    #tensorflow_probability==0.15.0
 
-#RUN python3.8 -m pip uninstall tensorflow-cpu==2.7.0
+RUN mamba install -y -q -c conda-forge tensorflow-probability==0.15.0 tensorflow-gpu==2.6.0
+
+#RUN python3.8 -m pip uninstall tensorflow-cpu
 
 USER root 
 
