@@ -98,7 +98,27 @@ RUN python3.8 -m pip install --upgrade pip
 #    voila==0.3.5 \
 #    bqplot==0.12.36
 
+#RUN python3.8 -m pip install \
+#    onnx==1.12.0 \
+#    onnx-tf==1.10.0 \
+#    tf2onnx==1.13.0 \
+#    skl2onnx==1.13 \
+#    scikit-image==0.19.3 \
+#    opencv-python==4.6.0.66 \
+#    nibabel==4.0.2 \
+#    onnxruntime==1.13.1 \
+#    seaborn==0.12.1 \
+    #elyra==3.7.0 \
+#    voila==0.3.5 \
+#    bqplot==0.12.36
+
+# Python packages
 RUN python3.8 -m pip install \
+    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+    tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0 \
+    jax==0.3.24 \
+    jaxlib==0.3.24 \
     onnx==1.12.0 \
     onnx-tf==1.10.0 \
     tf2onnx==1.13.0 \
@@ -107,26 +127,6 @@ RUN python3.8 -m pip install \
     opencv-python==4.6.0.66 \
     nibabel==4.0.2 \
     onnxruntime==1.13.1 \
-    seaborn==0.12.1 \
-    #elyra==3.8.0 \
-    voila==0.3.5 \
-    bqplot==0.12.36
-
-# Python packages
-RUN python3.8 -m pip install \
-    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    tensorflow-gpu==2.7.0 \
-    tensorflow_probability==0.15.0 \
-    jax==0.3.25 \
-    jaxlib==0.3.25 \
-    #onnx==1.12.0 \
-    #onnx-tf==1.10.0 \
-    #tf2onnx==1.13.0 \
-    #skl2onnx==1.13 \
-    #scikit-image==0.19.3 \
-    #opencv-python==4.6.0.66 \
-    #nibabel==4.0.2 \
-    #onnxruntime==1.13.1 \
     bioblend==1.0.0 \
     galaxy-ie-helpers==0.2.5 \
     numba==0.56.4 \
@@ -141,11 +141,11 @@ RUN python3.8 -m pip install \
     jupyterlab-execute-time==2.3.0 \
     jupyterlab-kernelspy==3.1.0 \
     jupyterlab-system-monitor==0.8.0 \
-    jupyterlab-topbar==0.6.1
-    #seaborn==0.12.1 \
+    jupyterlab-topbar==0.6.1 \
+    seaborn==0.12.1 \
     #elyra==3.8.0 \
-    #voila==0.3.5 \
-    #bqplot==0.12.36 \
+    voila==0.3.5 \
+    bqplot==0.12.36
     #tensorflow-gpu==2.7.0
     #pytz==2022.7 \
     #pyrsistent==0.19.2 \
@@ -171,6 +171,8 @@ RUN python3.8 -m pip install \
     #mpmath==1.2.1 \
     #mistune==0.8.4 \
     #pathspec==0.9.0
+
+#RUN python3.8 -m pip install elyra
 
 #RUN pip install \
 #    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
