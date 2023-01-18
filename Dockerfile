@@ -115,6 +115,10 @@ RUN python3.8 -m pip install \
 # Python packages
 RUN python3.8 -m pip install \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+    tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0 \
+    jax==0.3.25 \
+    jaxlib==0.3.25 \
     #onnx==1.12.0 \
     #onnx-tf==1.10.0 \
     #tf2onnx==1.13.0 \
@@ -188,20 +192,22 @@ RUN conda install -c conda-forge mamba python==3.8
 
 RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
 
-RUN python3.8 -m pip install \
+#RUN python3.8 -m pip install \
     #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    #jax==0.3.24 \
-    jaxlib==0.3.25 \
+    #jax==0.3.25 \
+    #jaxlib==0.3.25 \
     #dm-haiku==0.0.7 \
     #dm-haiku==0.0.9
-    tensorflow-gpu==2.7.0 \
+    #tensorflow-gpu==2.7.0 \
     #numpy==1.23.5 \
     #tensorflow-gpu==2.7.0 \
-    tensorflow_probability==0.15.0
+    #tensorflow_probability==0.15.0
 
 #RUN mamba install -y -q -c conda-forge tensorflow-probability==0.15.0 tensorflow-gpu==2.6.0
 
 #RUN python3.8 -m pip uninstall tensorflow-cpu
+
+#RUN python3.8 -m  pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
 
 USER root 
 
