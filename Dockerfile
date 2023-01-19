@@ -29,7 +29,7 @@ RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt install -y python3.7 python3.7-dev python3-pip python3.7-distutils gfortran libopenblas-dev liblapack-dev
+    apt install -y python3.8 python3.8-dev python3-pip python3.8-distutils gfortran libopenblas-dev liblapack-dev
 
 #RUN echo python --version
 
@@ -39,14 +39,14 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     
 #RUN update-alternatives --set python /usr/bin/python3.9
  
-RUN alias python=/usr/bin/python3.7
+RUN alias python=/usr/bin/python3.8
    
-RUN python3.7 -m pip install --upgrade pip requests setuptools pipenv
+RUN python3.8 -m pip install --upgrade pip requests setuptools pipenv
 
 # make requests library use the Debian CA bundle (includes Zalando CA)
 ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-ENV PATH=/usr/bin/python3.7:$PATH
+ENV PATH=/usr/bin/python3.8:$PATH
 
 #RUN ln -sfn /usr/bin/python3.9 /usr/bin/python3 && ln -sfn /usr/bin/python3 /usr/bin/python && ln -sfn /usr/bin/pip3 /usr/bin/pip
 
@@ -83,7 +83,7 @@ USER ${NB_USER}
 #ENV PATH=$CONDA_DIR/bin:$PATH
 ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
-RUN python3.7 -m pip install --upgrade pip
+RUN python3.8 -m pip install --upgrade pip
 
 #RUN pip install \
 #    onnx==1.12.0 \
@@ -115,7 +115,7 @@ RUN python3.7 -m pip install --upgrade pip
 #    bqplot==0.12.36
 
 # Python packages
-RUN python3.7 -m pip install \
+RUN python3.8 -m pip install \
     #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     #tensorflow-gpu==2.7.0 \
     #tensorflow_probability==0.15.0 \
@@ -203,7 +203,7 @@ RUN python3.7 -m pip install \
 
 #RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
-RUN python3.7 -m pip install \
+RUN python3.8 -m pip install \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
     #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp37-cp37m-manylinux2014_x86_64.whl \
     #jax==0.3.25 \
@@ -216,11 +216,19 @@ RUN python3.7 -m pip install \
     #tensorflow-gpu==2.7.0 \
     #tensorflow_probability==0.15.0
 
+#RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+     #/bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
-RUN python3.7 -m pip install \
-    https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp37-cp37m-manylinux2014_x86_64.whl \
+#ENV PATH=$CONDA_DIR/bin:$PATH
+
+#RUN conda install -c conda-forge mamba python==3.8
+
+#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
+
+RUN python3.8 -m pip install \
+    https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
     jax==0.3.25 \
-    tensorflow-gpu \
+    tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
 #RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
