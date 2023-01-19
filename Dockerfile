@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.4.0-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
 
 ENV NB_USER="gpuuser"
 ENV UID=999
@@ -21,38 +21,22 @@ RUN apt-get update --yes && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
-
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
     apt install -y python3.8 python3.8-dev python3-pip python3.8-distutils gfortran libopenblas-dev liblapack-dev
 
-#RUN echo python --version
-
-# set python 3 as the default python version
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-    
-#RUN update-alternatives --set python /usr/bin/python3.9
  
 RUN alias python=/usr/bin/python3.8
    
 RUN python3.8 -m pip install --upgrade pip requests setuptools pipenv
 
-# make requests library use the Debian CA bundle (includes Zalando CA)
 ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 ENV PATH=/usr/bin/python3.8:$PATH
-
-#RUN ln -sfn /usr/bin/python3.9 /usr/bin/python3 && ln -sfn /usr/bin/python3 /usr/bin/python && ln -sfn /usr/bin/pip3 /usr/bin/pip
-
-#RUN echo "**** Installing Python ****" && \
-#    add-apt-repository ppa:deadsnakes/ppa &&  \
-#    apt-get install -y build-essential python3.9 python3.9-dev python3-pip python3.9-distutils && \
-#    curl -O https://bootstrap.pypa.io/get-pip.py && \
-#    python3.9 get-pip.py && \
-#    rm -rf /var/lib/apt/lists/*
 
 ENV CONDA_DIR=/opt/conda \
     SHELL=/bin/bash \
@@ -62,7 +46,6 @@ ENV CONDA_DIR=/opt/conda \
     LANGUAGE=en_US.UTF-8 \
     PATH="${CONDA_DIR}/bin:${PATH}" \
     HOME="/home/${NB_USER}"
-
 
 RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
@@ -74,30 +57,31 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 
 USER ${NB_USER}
 
-#RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-     #/bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
-
-#ENV PATH=$CONDA_DIR/bin:$PATH
+ENV PATH=$CONDA_DIR/bin:$PATH
 ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
-RUN python3.8 -m pip install --upgrade pip
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
-#RUN pip install \
-#    onnx==1.12.0 \
-#    onnx-tf==1.10.0 \
-#    tf2onnx==1.13.0 \
-#    skl2onnx==1.13 \
-#    scikit-image==0.19.3 \
-#    opencv-python==4.6.0.66 \
-#    nibabel==4.0.2 \
-#    onnxruntime==1.13.1 \
-#    seaborn==0.12.1 \
-    #elyra==3.8.0 \
-    #elyra==3.14.1 \
-#    voila==0.3.5 \
-#    bqplot==0.12.36
+RUN conda install -c conda-forge mamba python==3.8
+RUN mamba install -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
 RUN python3.8 -m pip install \
+    bioblend==1.0.0 \
+    galaxy-ie-helpers==0.2.5 \
+    numba==0.56.4 \
+    aquirdturtle_collapsible_headings==3.1.0 \
+    jupyterlab-nvdashboard==0.7.0 \
+    bokeh==2.4.0 \
+    jupyter_server==1.15.0 \
+    jupyterlab==3.3.4 \
+    nbclassic==0.4.8 \
+    jupyterlab-git==0.39.3 \
+    jupytext==1.14.1 \
+    jupyterlab-execute-time==2.3.0 \
+    jupyterlab-kernelspy==3.1.0 \
+    jupyterlab-system-monitor==0.8.0 \
+    jupyterlab-topbar==0.6.1 \
     onnx==1.12.0 \
     onnx-tf==1.10.0 \
     tf2onnx==1.13.0 \
@@ -107,141 +91,16 @@ RUN python3.8 -m pip install \
     nibabel==4.0.2 \
     onnxruntime==1.13.1 \
     seaborn==0.12.1 \
-    #elyra==3.7.0 \
     voila==0.3.5 \
-    bqplot==0.12.36
-
-
-# Python packages
-RUN python3.8 -m pip install \
-    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    #tensorflow-gpu==2.7.0 \
-    #tensorflow_probability==0.15.0 \
-    #jax==0.3.24 \
-    #jaxlib==0.3.24+cuda11.cudnn82 \
-    #dm-haiku==0.0.9 \
-    #onnx \
-    #onnx-tf \
-    #tf2onnx \
-    #skl2onnx \
-    #scikit-image \
-    #opencv-python \
-    #nibabel \
-    #onnxruntime \
-    bioblend==1.0.0 \
-    galaxy-ie-helpers==0.2.5 \
-    bioblend==1.0.0 \
-    galaxy-ie-helpers==0.2.5 \
-    numba==0.56.4 \
-    aquirdturtle_collapsible_headings==3.1.0 \
-    jupyterlab-nvdashboard==0.7.0 \
-    bokeh==2.4.0 \
-    #jupyter_server==1.15.0 \
-    jupyter_server==1.23.4 \
-    jupyterlab==3.3.4 \
-    nbclassic==0.4.8 \
-    jupyterlab-git==0.39.3 \
-    jupytext==1.14.1 \
-    jupyterlab-execute-time==2.3.0 \
-    jupyterlab-kernelspy==3.1.0 \
-    jupyterlab-system-monitor==0.8.0 \
-    jupyterlab-topbar==0.6.1
-    #seaborn \
-    #elyra \
-    #voila \
-    #bqplot
-    #tensorflow-gpu==2.7.0
-    #pytz==2022.7 \
-    #pyrsistent==0.19.2 \
-    #pyparsing==3.0.9 \
-    #pylint==2.15.6 \
-    #Pygments==2.13.0 \
-    #pydocstyle==6.1.1 \
-    #PyNaCl==1.5.0 \
-    #python-dateutil==2.8.2 \
-    #python-lsp-jsonrpc==1.0.0 \
-    #PyJWT==2.3.0 \
-    #ujson==5.2.0 \
-    #urllib3==1.26.7 \
-    #watchdog==2.1.7 \
-    #tqdm==4.62.3 \
-    #traitlets==5.1.1 \
-    #traittypes==0.2.1 \
-    #tomlkit==0.10.1 \
-    #tifffile==2021.11.2 \
-    #terminado==0.12.1 \
-    #protobuf==3.16.0 \
-    #prompt-toolkit==3.0.22 \
-    #mpmath==1.2.1 \
-    #mistune==0.8.4 \
-    #pathspec==0.9.0
-
-#RUN python3.8 -m pip install elyra
-
-#RUN pip install -q "jax[cuda]>=0.3.8,<0.4" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-# https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.8+cuda11.cudnn82-cp38-none-manylinux2014_x86_64.whl
-
-
-#RUN pip install \
-#    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-
-#RUN conda install -c conda-forge mamba python==3.8
-
-#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
-
-#RUN python3.9 -m pip install jax==0.3.24 jaxlib==0.3.24 "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-
-#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
-
-#RUN python3.9 -m pip install "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-#RUN python3.9 -m pip install -q "jax[cuda]>=0.3.8,<0.4" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-# For template-based predictions also install kalign and hhsuite
-
-#RUN python3.8 -m pip install \
-#    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-
-#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
-
-#RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-
-RUN python3.8 -m pip install \
-    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold"
-    #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp37-cp37m-manylinux2014_x86_64.whl \
-    #jax==0.3.25 \
-    #jaxlib==0.3.25 \
-    #jaxlib==0.3.25+cuda11.cudnn82 \
-    #dm-haiku==0.0.7 \
-    #dm-haiku==0.0.9
-    #tensorflow-gpu==2.7.0 \
-    #numpy==1.23.5 \
-    #tensorflow-gpu==2.7.0 \
-    #tensorflow_probability==0.15.0
-
-#RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-     #/bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
-
-#ENV PATH=$CONDA_DIR/bin:$PATH
-
-#RUN conda install -c conda-forge mamba python==3.8
-
-#RUN mamba install -y -q -c conda-forge -c bioconda kalign2=2.04 hhsuite=3.3.0
-
-RUN python3.8 -m pip install \
+    #elyra=3.6.0 \
+    bqplot==0.12.36 \
+    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
-    jax==0.3.25 \
+    jax==0.3.25
+
+RUN python3.8 -m pip install \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
-
-#RUN python3.8 -m pip install elyra
-#RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-
-#RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-
-#RUN mamba install -y -q -c conda-forge tensorflow-probability==0.15.0 tensorflow-gpu==2.6.0
-
-#RUN python3.8 -m pip uninstall tensorflow-cpu
-
-#RUN python3.8 -m  pip install --upgrade "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
 
 USER root 
 
@@ -279,8 +138,6 @@ ENV DEBUG=false \
     GALAXY_URL=none
 
 RUN chown -R $NB_USER /home/$NB_USER /import
-
-#RUN chown -R $NB_USER /import
 
 USER ${NB_USER}
 
