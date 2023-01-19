@@ -1,6 +1,4 @@
-#FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
-
-FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu18.04
+FROM nvidia/cuda:11.4.0-cudnn8-devel-ubuntu20.04
 
 ENV NB_USER="gpuuser"
 ENV UID=999
@@ -19,7 +17,6 @@ RUN apt-get update --yes && \
     curl \
     libffi-dev \
     wget && \
-    #add-apt-repository ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.9 python3.9-dev python3-pip && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -100,19 +97,20 @@ RUN python3.8 -m pip install --upgrade pip
 #    voila==0.3.5 \
 #    bqplot==0.12.36
 
-#RUN python3.8 -m pip install \
-#    onnx==1.12.0 \
-#    onnx-tf==1.10.0 \
-#    tf2onnx==1.13.0 \
-#    skl2onnx==1.13 \
-#    scikit-image==0.19.3 \
-#    opencv-python==4.6.0.66 \
-#    nibabel==4.0.2 \
-#    onnxruntime==1.13.1 \
-#    seaborn==0.12.1 \
+RUN python3.8 -m pip install \
+    onnx==1.12.0 \
+    onnx-tf==1.10.0 \
+    tf2onnx==1.13.0 \
+    skl2onnx==1.13 \
+    scikit-image==0.19.3 \
+    opencv-python==4.6.0.66 \
+    nibabel==4.0.2 \
+    onnxruntime==1.13.1 \
+    seaborn==0.12.1 \
     #elyra==3.7.0 \
-#    voila==0.3.5 \
-#    bqplot==0.12.36
+    voila==0.3.5 \
+    bqplot==0.12.36
+
 
 # Python packages
 RUN python3.8 -m pip install \
@@ -122,21 +120,24 @@ RUN python3.8 -m pip install \
     #jax==0.3.24 \
     #jaxlib==0.3.24+cuda11.cudnn82 \
     #dm-haiku==0.0.9 \
-    #onnx==1.12.0 \
-    #onnx-tf==1.10.0 \
-    #tf2onnx==1.13.0 \
-    #skl2onnx==1.13 \
-    #scikit-image==0.19.3 \
-    #opencv-python==4.6.0.66 \
-    #nibabel==4.0.2 \
-    #onnxruntime==1.13.1 \
+    #onnx \
+    #onnx-tf \
+    #tf2onnx \
+    #skl2onnx \
+    #scikit-image \
+    #opencv-python \
+    #nibabel \
+    #onnxruntime \
+    bioblend==1.0.0 \
+    galaxy-ie-helpers==0.2.5 \
     bioblend==1.0.0 \
     galaxy-ie-helpers==0.2.5 \
     numba==0.56.4 \
     aquirdturtle_collapsible_headings==3.1.0 \
     jupyterlab-nvdashboard==0.7.0 \
     bokeh==2.4.0 \
-    jupyter_server==1.15.0 \
+    #jupyter_server==1.15.0 \
+    jupyter_server==1.23.4 \
     jupyterlab==3.3.4 \
     nbclassic==0.4.8 \
     jupyterlab-git==0.39.3 \
@@ -145,10 +146,10 @@ RUN python3.8 -m pip install \
     jupyterlab-kernelspy==3.1.0 \
     jupyterlab-system-monitor==0.8.0 \
     jupyterlab-topbar==0.6.1
-    #seaborn==0.12.1 \
-    #elyra==3.8.0 \
-    #voila==0.3.5 \
-    #bqplot==0.12.36
+    #seaborn \
+    #elyra \
+    #voila \
+    #bqplot
     #tensorflow-gpu==2.7.0
     #pytz==2022.7 \
     #pyrsistent==0.19.2 \
@@ -230,6 +231,8 @@ RUN python3.8 -m pip install \
     jax==0.3.25 \
     tensorflow-gpu==2.7.0 \
     tensorflow_probability==0.15.0
+
+#RUN python3.8 -m pip install elyra
 #RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 #RUN python3.8 -m pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
