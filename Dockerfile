@@ -16,6 +16,7 @@ RUN apt-get update --yes && \
     sudo \
     curl \
     libffi-dev \
+    net-tools \
     wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -64,7 +65,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
     /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
 RUN conda install -c conda-forge mamba python==3.8
-RUN mamba install -c "nvidia/label/cuda-11.8.0" cuda-nvcc
+RUN mamba install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
 RUN python3.8 -m pip install \
     bioblend==1.0.0 \
@@ -96,7 +97,11 @@ RUN python3.8 -m pip install \
     bqplot==0.12.36 \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
-    jax==0.3.25
+    jax==0.3.25 \
+    biopython==1.79
+
+RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python3.8/site-packages/alphafold/model/mapping.py
+RUN sed -i -e "s/jax.tree_unflatten/jax.tree_util.tree_unflatten/g" /opt/conda/lib/python3.8/site-packages/alphafold/model/mapping.py
 
 RUN python3.8 -m pip install \
     tensorflow-gpu==2.7.0 \
