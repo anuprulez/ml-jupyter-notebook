@@ -73,8 +73,8 @@ RUN python3.8 -m pip install \
     aquirdturtle_collapsible_headings==3.1.0 \
     jupyterlab-nvdashboard==0.7.0 \
     bokeh==2.4.0 \
-    jupyter_server==1.15.0 \
-    jupyterlab==3.3.4 \
+    jupyter_server==1.16.0 \
+    jupyterlab==3.4.6 \
     nbclassic==0.4.8 \
     jupyterlab-git==0.39.3 \
     jupytext==1.14.1 \
@@ -92,7 +92,7 @@ RUN python3.8 -m pip install \
     onnxruntime==1.13.1 \
     seaborn==0.12.1 \
     voila==0.3.5 \
-    #elyra=3.6.0 \
+    elyra==3.14.1 \
     bqplot==0.12.36 \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
     https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
