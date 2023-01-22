@@ -69,7 +69,7 @@ RUN mamba install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
 RUN python3.8 -m pip install \
     bioblend==1.0.0 \
-    galaxy-ie-helpers==0.2.5 \
+    galaxy-ie-helpers==0.2.7 \
     numba==0.56.4 \
     aquirdturtle_collapsible_headings==3.1.0 \
     jupyterlab-nvdashboard==0.7.0 \
@@ -139,7 +139,6 @@ ENV DEBUG=false \
     API_KEY=none \
     HISTORY_ID=none \
     REMOTE_HOST=none \
-    DISABLE_AUTH=true \
     GALAXY_URL=none
 
 RUN chown -R $NB_USER /home/$NB_USER /import
