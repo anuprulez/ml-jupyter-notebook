@@ -2,6 +2,8 @@
 
 [![bio.tools entry](https://img.shields.io/badge/bio.tools-gpu-enabled_docker_container_with_jupyterlab_for_ai.svg)](https://bio.tools/gpu-enabled_docker_container_with_jupyterlab_for_ai) [![RRID entry](https://img.shields.io/badge/RRID-SCR_022695-blue.svg)](https://scicrunch.org/resources/about/registry/SCR_022695)
 
+# Published article: https://doi.org/10.1093/gigascience/giad028
+
 
 ## General information
 
