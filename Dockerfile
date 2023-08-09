@@ -1,7 +1,7 @@
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
 
-ENV NB_USER="gpuuser"
-ENV UID=999
+ENV NB_USER="root"
+#ENV UID=0
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -22,22 +22,26 @@ RUN apt-get update --yes && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
+ENV PYTHON_VERSION=3.8
+
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt install -y python3.8 python3.8-dev python3-pip python3.8-distutils gfortran libopenblas-dev liblapack-dev
+    apt install -y python$PYTHON_VERSION python$PYTHON_VERSION-dev python3-pip python$PYTHON_VERSION-distutils gfortran libopenblas-dev liblapack-dev
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
  
-RUN alias python=/usr/bin/python3.8
+RUN alias python=/usr/bin/python$PYTHON_VERSION
    
-RUN python3.8 -m pip install --upgrade pip requests setuptools pipenv
+RUN python$PYTHON_VERSION -m pip install --upgrade pip requests setuptools pipenv
 
 ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-ENV PATH=/usr/bin/python3.8:$PATH
+ENV PATH=/usr/bin/python$PYTHON_VERSION:$PATH
+
+RUN if [ "${NB_USER}" = "root" ]; then ln -s /root /home/root; fi
 
 ENV CONDA_DIR=/opt/conda \
     SHELL=/bin/bash \
@@ -51,7 +55,7 @@ ENV CONDA_DIR=/opt/conda \
 RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
-    useradd -l -m -s /bin/bash -u $UID $NB_USER && \
+    #useradd -l -m -s /bin/bash -u $UID $NB_USER && \
     mkdir -p "${CONDA_DIR}" && \
     chown -R "${NB_USER}" "${CONDA_DIR}" && \
     chmod g+w /etc/passwd
@@ -61,53 +65,63 @@ USER ${NB_USER}
 ENV PATH=$CONDA_DIR/bin:$PATH
 ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
+#RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+#    /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
-RUN conda install -c conda-forge mamba python==3.8
-RUN mamba install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
+#RUN conda install -c conda-forge python==$PYTHON_VERSION
+#RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
-RUN python3.8 -m pip install \
-    bioblend==1.0.0 \
-    galaxy-ie-helpers==0.2.7 \
-    numba==0.56.4 \
-    aquirdturtle_collapsible_headings==3.1.0 \
-    jupyterlab-nvdashboard==0.7.0 \
-    bokeh==2.4.0 \
-    jupyter_server==1.16.0 \
-    jupyterlab==3.4.6 \
-    nbclassic==0.4.8 \
-    jupyterlab-git==0.39.3 \
-    jupytext==1.14.1 \
-    jupyterlab-execute-time==2.3.0 \
-    jupyterlab-kernelspy==3.1.0 \
-    jupyterlab-system-monitor==0.8.0 \
-    jupyterlab-topbar==0.6.1 \
-    onnx==1.12.0 \
-    onnx-tf==1.10.0 \
-    tf2onnx==1.13.0 \
-    skl2onnx==1.13 \
-    scikit-image==0.19.3 \
-    opencv-python==4.6.0.66 \
-    nibabel==4.0.2 \
-    onnxruntime==1.13.1 \
-    seaborn==0.12.1 \
-    voila==0.3.5 \
-    elyra==3.14.1 \
-    bqplot==0.12.36 \
-    "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
-    jax==0.3.25 \
-    biopython==1.79
+RUN python$PYTHON_VERSION -m pip install \
+    #bioblend==1.0.0 \
+    #galaxy-ie-helpers==0.2.7 \
+    #numba \
+    #aquirdturtle_collapsible_headings==3.1.0 \
+    #jupyterlab-nvdashboard==0.7.0 \
+    #bokeh==2.4.0 \
+    #jupyter_server==1.16.0 \
+    jupyter_server==1.21.0 \
+    jupyterlab==3.6.5 \
+    #jupyterlab==3.4.6
+    #nbclassic==0.4.8 \
+    #jupyterlab-git==0.39.3 \
+    #jupytext==1.14.1 \
+    jupytext==1.15.0 \
+    #jupyterlab-execute-time==2.3.0 \
+    #jupyterlab-kernelspy==3.1.0 \
+    #jupyterlab-system-monitor==0.8.0 \
+    #jupyterlab-topbar==0.6.1 \
+    #onnx==1.12.0 \
+    #onnx-tf==1.10.0 \
+    #tf2onnx==1.13.0 \
+    #skl2onnx==1.13 \
+    #scikit-image==0.19.3 \
+    #opencv-python==4.6.0.66 \
+    #nibabel==4.0.2 \
+    #onnxruntime==1.13.1 \
+    #seaborn==0.12.1 \
+    #voila==0.3.5 \
+    #elyra==3.14.1 \
+    #elyra==3.15.0 \
+    #bqplot==0.12.36 \
+    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
+    #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp39-cp39-manylinux2014_x86_64.whl \
+    #jax==0.3.25 \
+    #biopython==1.79 \
+    jupyter_ai==1.0.0
+    #langchain==0.0.22
 
-RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python3.8/site-packages/alphafold/model/mapping.py
-RUN sed -i -e "s/jax.tree_unflatten/jax.tree_util.tree_unflatten/g" /opt/conda/lib/python3.8/site-packages/alphafold/model/mapping.py
+#RUN python3.9 -m pip install jupyter_ai==1.0.0
 
-RUN python3.8 -m pip install \
-    tensorflow-gpu==2.7.0 \
-    tensorflow_probability==0.15.0
+#RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python3.9/site-packages/alphafold/model/mapping.py
+#RUN sed -i -e "s/jax.tree_unflatten/jax.tree_util.tree_unflatten/g" /opt/conda/lib/python3.9/site-packages/alphafold/model/mapping.py
 
-USER root 
+#RUN python3.8 -m pip install \
+#    tensorflow-gpu==2.7.0 \
+#    tensorflow_probability==0.15.0
+
+#RUN python3.9 -m pip install jupyter_ai==1.0.0
+
+USER root
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir -p /import
