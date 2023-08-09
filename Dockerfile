@@ -72,47 +72,52 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
 #RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
 RUN python$PYTHON_VERSION -m pip install \
-    #bioblend==1.0.0 \
-    #galaxy-ie-helpers==0.2.7 \
-    #numba \
-    #aquirdturtle_collapsible_headings==3.1.0 \
-    #jupyterlab-nvdashboard==0.7.0 \
-    #bokeh==2.4.0 \
+    bioblend==1.0.0 \
+    galaxy-ie-helpers==0.2.7 \
+    numba==0.56.4 \
+    aquirdturtle_collapsible_headings==3.1.0 \
+    jupyterlab-nvdashboard==0.7.0 \
+    bokeh==2.4.0 \
     #jupyter_server==1.16.0 \
     jupyter_server==1.21.0 \
     jupyterlab==3.6.5 \
     #jupyterlab==3.4.6
-    #nbclassic==0.4.8 \
-    #jupyterlab-git==0.39.3 \
+    nbclassic==0.4.8 \
+    jupyterlab-git==0.39.3 \
     #jupytext==1.14.1 \
     jupytext \
-    #jupyterlab-execute-time==2.3.0 \
-    #jupyterlab-kernelspy==3.1.0 \
-    #jupyterlab-system-monitor==0.8.0 \
-    #jupyterlab-topbar==0.6.1 \
-    #onnx==1.12.0 \
-    #onnx-tf==1.10.0 \
-    #tf2onnx==1.13.0 \
-    #skl2onnx==1.13 \
-    #scikit-image==0.19.3 \
-    #opencv-python==4.6.0.66 \
-    #nibabel==4.0.2 \
-    #onnxruntime==1.13.1 \
-    #seaborn==0.12.1 \
-    #voila==0.3.5 \
+    jupyterlab-execute-time==2.3.0 \
+    jupyterlab-kernelspy==3.1.0 \
+    jupyterlab-system-monitor==0.8.0 \
+    jupyterlab-topbar==0.6.1 \
+    onnx==1.12.0 \
+    onnx-tf==1.10.0 \
+    tf2onnx==1.13.0 \
+    skl2onnx==1.13 \
+    scikit-image==0.19.3 \
+    opencv-python==4.6.0.66 \
+    nibabel==4.0.2 \
+    onnxruntime==1.13.1 \
+    seaborn==0.12.1 \
+    voila==0.3.5 \
     #elyra==3.14.1 \
-    #elyra==3.15.0 \
-    #bqplot==0.12.36 \
+    elyra==3.15.0 \
+    bqplot==0.12.36 \
     #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
-    jax==0.3.25 \
-    alphafold-colabfold==2.1.16 \
-    #biopython==1.79 \
+    #"colabfold[alphafold]" \
+    #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
+    #jax==0.3.25 \
+    #alphafold-colabfold \
+    #colabfold \
+    #alphafold-colabfold==2.1.16 \
+    biopython==1.79 \
     jupyter_ai==1.0.0
     #langchain==0.0.22
 
 #RUN python3.9 -m pip install jupyter_ai==1.0.0
 
+#RUN conda install -c conda-forge python==3.8
+#RUN python$PYTHON_VERSION -m pip install colabfold==1.3.0
 #RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python$PYTHON_VERSION/site-packages/alphafold/model/mapping.py
 #RUN sed -i -e "s/jax.tree_unflatten/jax.tree_util.tree_unflatten/g" /opt/conda/lib/python$PYTHON_VERSION/site-packages/alphafold/model/mapping.py
 
