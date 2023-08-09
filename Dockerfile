@@ -65,8 +65,8 @@ USER ${NB_USER}
 ENV PATH=$CONDA_DIR/bin:$PATH
 ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
-#RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-#    /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
 #RUN conda install -c conda-forge python==$PYTHON_VERSION
 #RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
@@ -85,7 +85,7 @@ RUN python$PYTHON_VERSION -m pip install \
     #nbclassic==0.4.8 \
     #jupyterlab-git==0.39.3 \
     #jupytext==1.14.1 \
-    jupytext==1.15.0 \
+    jupytext \
     #jupyterlab-execute-time==2.3.0 \
     #jupyterlab-kernelspy==3.1.0 \
     #jupyterlab-system-monitor==0.8.0 \
@@ -104,20 +104,21 @@ RUN python$PYTHON_VERSION -m pip install \
     #elyra==3.15.0 \
     #bqplot==0.12.36 \
     #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp39-cp39-manylinux2014_x86_64.whl \
-    #jax==0.3.25 \
+    https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
+    jax==0.3.25 \
+    alphafold-colabfold==2.1.16 \
     #biopython==1.79 \
     jupyter_ai==1.0.0
     #langchain==0.0.22
 
 #RUN python3.9 -m pip install jupyter_ai==1.0.0
 
-#RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python3.9/site-packages/alphafold/model/mapping.py
-#RUN sed -i -e "s/jax.tree_unflatten/jax.tree_util.tree_unflatten/g" /opt/conda/lib/python3.9/site-packages/alphafold/model/mapping.py
+#RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python$PYTHON_VERSION/site-packages/alphafold/model/mapping.py
+#RUN sed -i -e "s/jax.tree_unflatten/jax.tree_util.tree_unflatten/g" /opt/conda/lib/python$PYTHON_VERSION/site-packages/alphafold/model/mapping.py
 
-#RUN python3.8 -m pip install \
-#    tensorflow-gpu==2.7.0 \
-#    tensorflow_probability==0.15.0
+RUN python$PYTHON_VERSION -m pip install \
+    tensorflow-gpu==2.7.0 \
+    tensorflow_probability==0.15.0
 
 #RUN python3.9 -m pip install jupyter_ai==1.0.0
 
