@@ -111,6 +111,7 @@ RUN python$PYTHON_VERSION -m pip install \
     biopython==1.79 \
     jupyter_ai==1.0.0 \
     "colabfold[alphafold]==1.2.0" \
+    # https://colab.research.google.com/github/sokrypton/ColabFold/blob/v1.2.0/AlphaFold2.ipynb
     dm-haiku ml-collections py3Dmol \
     "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
