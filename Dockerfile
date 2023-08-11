@@ -68,15 +68,13 @@ ENV PATH=/home/$NB_USER/.local/bin:$PATH
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -f -b -p /opt/conda && rm -rf ~/miniconda.sh
 
-RUN conda install -c conda-forge mamba python=$PYTHON_VERSION
-RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
+RUN conda install -c conda-forge python=$PYTHON_VERSION
+#RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
 RUN python$PYTHON_VERSION -m pip install \
     bioblend==1.0.0 \
     galaxy-ie-helpers==0.2.7 \
-    numba \
     aquirdturtle_collapsible_headings \
-    jupyterlab-nvdashboard \
     bokeh \
     jupyter_server==1.21.0 \
     jupyterlab==3.6.5 \
@@ -116,9 +114,7 @@ RUN python$PYTHON_VERSION -m pip install \
 
 RUN conda install -y -q -c bioconda kalign3=3.2.2 hhsuite=3.3.0
 
-RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy
-
-RUN python$PYTHON_VERSION -m pip install py3Dmol==2.0.0.post2
+RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy py3Dmol==2.0.0.post2 numba jupyterlab-nvdashboard==0.7.0
 
 USER root
 
