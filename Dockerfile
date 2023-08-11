@@ -55,7 +55,7 @@ ENV CONDA_DIR=/opt/conda \
 RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
-    #useradd -l -m -s /bin/bash -u $UID $NB_USER && \
+    useradd -l -m -s /bin/bash -u $UID $NB_USER && \
     mkdir -p "${CONDA_DIR}" && \
     chown -R "${NB_USER}" "${CONDA_DIR}" && \
     chmod g+w /etc/passwd
@@ -119,6 +119,8 @@ RUN conda install -y -q -c bioconda kalign3=3.2.2 hhsuite=3.3.0
 RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy
 
 RUN python$PYTHON_VERSION -m pip install py3Dmol==2.0.0.post2
+
+USER root
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir -p /import
