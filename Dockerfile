@@ -74,44 +74,36 @@ RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 RUN python$PYTHON_VERSION -m pip install \
     bioblend==1.0.0 \
     galaxy-ie-helpers==0.2.7 \
-    #numba \
-    #aquirdturtle_collapsible_headings \
-    #jupyterlab-nvdashboard \
+    numba \
+    aquirdturtle_collapsible_headings \
+    jupyterlab-nvdashboard \
     bokeh \
     jupyter_server==1.21.0 \
     jupyterlab==3.6.5 \
-    #nbclassic \
-    #jupyterlab-git \
+    nbclassic \
+    jupyterlab-git \
     jupytext \
-    #jupyterlab-execute-time \
-    #jupyterlab-kernelspy \
-    #jupyterlab-system-monitor \
-    #jupyterlab-topbar \
-    #onnx==1.12.0 \
-    #onnx-tf==1.10.0 \
-    #tf2onnx==1.13.0 \
-    #skl2onnx==1.13 \
-    #scikit-image \
-    #opencv-python \
-    #nibabel \
-    #onnxruntime==1.13.1 \
+    jupyterlab-execute-time \
+    jupyterlab-kernelspy \
+    jupyterlab-system-monitor \
+    jupyterlab-topbar \
+    onnx==1.12.0 \
+    onnx-tf==1.10.0 \
+    tf2onnx==1.13.0 \
+    skl2onnx==1.13 \
+    scikit-image \
+    opencv-python \
+    nibabel \
+    onnxruntime==1.13.1 \
     seaborn \
     voila \
     elyra \
     bqplot \
-    #"colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold" \
-    #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp38-cp38-manylinux2014_x86_64.whl \
-    #jax==0.3.25 \
     biopython \
     jupyter_ai==1.0.0 \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold@v1.2.0" \
-    #https://storage.googleapis.com/jax-releases/cuda11/jaxlib-0.3.25+cuda11.cudnn82-cp39-cp39-manylinux2014_x86_64.whl \
-    #jax==0.3.25
-    #"colabfold[alphafold]==1.2.0" \
-    # https://colab.research.google.com/github/sokrypton/ColabFold/blob/v1.2.0/AlphaFold2.ipynb
     dm-haiku \
     ml-collections \
-    #py3Dmol \
     "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 RUN sed -i -e "s/jax.tree_flatten/jax.tree_util.tree_flatten/g" /opt/conda/lib/python$PYTHON_VERSION/site-packages/alphafold/model/mapping.py
@@ -123,22 +115,11 @@ RUN python$PYTHON_VERSION -m pip install \
 
 RUN conda install -y -q -c bioconda kalign3=3.2.2 hhsuite=3.3.0
 
-#RUN conda install -y -q -c conda-forge py3dmol
-
-#RUN apt-get -qq -y install jq curl zlib1g gawk
-
 RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy
 
 RUN python$PYTHON_VERSION -m pip install py3Dmol==2.0.0.post2
 
-#RUN python$PYTHON_VERSION -m pip install nodejs npm
-
-#RUN apt-get -qq -y install nodejs npm
-
-#RUN conda install -y -q -c conda-forge nodejs npm
-
-#RUN jupyter labextension install jupyterlab_3dmol
-
+RUN python$PYTHON_VERSION -m pip install wrapt==1.14.1
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir -p /import
