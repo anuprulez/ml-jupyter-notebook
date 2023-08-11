@@ -42,4 +42,4 @@ jupyter trust /import/elyra/*.ipynb
 jupyter trust /import/notebooks/*.ipynb
 jupyter trust /import/usecases/*.ipynb
 
-jupyter lab --allow-root --no-browser
+jupyter lab --no-browser
