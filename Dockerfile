@@ -115,7 +115,9 @@ RUN python$PYTHON_VERSION -m pip install \
 
 RUN conda install -y -q -c bioconda kalign3=3.2.2 hhsuite=3.3.0
 
-RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy py3Dmol==2.0.0.post2 numba jupyterlab-nvdashboard==0.7.0
+RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy py3Dmol==2.0.0.post2 numba
+
+RUN conda install -y -q -c "nvidia/label/cuda-11.8.0" cuda-nvcc
 
 USER root
 
