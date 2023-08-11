@@ -1,7 +1,7 @@
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
 
-ENV NB_USER="root"
-#ENV UID=0
+ENV NB_USER="gpuuser"
+ENV UID=999
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -91,6 +91,7 @@ RUN python$PYTHON_VERSION -m pip install \
     onnx-tf==1.10.0 \
     tf2onnx==1.13.0 \
     skl2onnx==1.13 \
+    wrapt==1.14.1 \
     scikit-image \
     opencv-python \
     nibabel \
@@ -118,8 +119,6 @@ RUN conda install -y -q -c bioconda kalign3=3.2.2 hhsuite=3.3.0
 RUN python$PYTHON_VERSION -m pip install numpy==1.20.0 pandas scipy
 
 RUN python$PYTHON_VERSION -m pip install py3Dmol==2.0.0.post2
-
-RUN python$PYTHON_VERSION -m pip install wrapt==1.14.1
 
 RUN mkdir -p /home/$NB_USER/.ipython/profile_default/startup/
 RUN mkdir -p /import
