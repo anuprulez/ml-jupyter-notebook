@@ -75,30 +75,31 @@ RUN python$PYTHON_VERSION -m pip install \
     bioblend==1.0.0 \
     galaxy-ie-helpers==0.2.7 \
     aquirdturtle_collapsible_headings \
-    bokeh \
+    jupyterlab-nvdashboard==0.7.0 \
+    bokeh==2.4.0 \
     jupyter_server==1.21.0 \
     jupyterlab==3.6.5 \
-    nbclassic \
-    jupyterlab-git \
-    jupytext \
-    jupyterlab-execute-time \
-    jupyterlab-kernelspy \
-    jupyterlab-system-monitor \
-    jupyterlab-topbar \
+    #nbclassic \
+    jupyterlab-git==0.39.3 \
+    jupytext==1.14.1 \
+    jupyterlab-execute-time==2.3.0 \
+    jupyterlab-kernelspy==3.1.0 \
+    jupyterlab-system-monitor==0.8.0 \
+    jupyterlab-topbar==0.6.1 \
     onnx==1.12.0 \
     onnx-tf==1.10.0 \
     tf2onnx==1.13.0 \
     skl2onnx==1.13 \
     wrapt==1.14.1 \
-    scikit-image \
-    opencv-python \
-    nibabel \
+    scikit-image==0.19.3 \
+    opencv-python==4.6.0.66 \
+    nibabel==4.0.2 \
     onnxruntime==1.13.1 \
-    seaborn \
-    voila \
-    elyra \
-    bqplot \
-    biopython \
+    seaborn==0.12.1 \
+    voila==0.3.5 \
+    elyra==3.15.0 \
+    bqplot==0.12.36 \
+    biopython==1.79 \
     jupyter_ai==1.0.0 \
     "colabfold[alphafold] @ git+https://github.com/sokrypton/ColabFold@v1.2.0" \
     dm-haiku \
